@@ -1,15 +1,3 @@
-/* =========================================================================
-   TaskFlow — landing.js  (Landing page only: index.html)
-   Owner: Member 1 (Team Lead)
-
-   What this file does:
-     - Scroll reveal: elements with class "reveal" fade in when they scroll into view
-     - Header shrinks when you scroll down
-     - Mobile menu toggle
-     - Counting animation for the stats numbers
-     - Footer year
-   ========================================================================= */
-
 document.addEventListener('DOMContentLoaded', function () {
 
   // ─── Apply saved theme ─────────────────────────────────────────────

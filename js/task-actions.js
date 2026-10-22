@@ -1,24 +1,4 @@
 /* =========================================================================
-   TaskFlow — task-actions.js
-   Owner: Member 3 (Task Creation, Management & Prioritization)
-
-   Shared helper functions that other members (especially Member 4)
-   call from their own pages.
-
-   ── FUNCTIONS FOR OTHER MEMBERS ──────────────────────────────────────────
-     createTaskCard(task)     → Returns the HTML string for one task card
-     toggleTaskComplete(id)   → Toggles pending ⇄ completed in localStorage
-     getPriorityValue(p)      → 'high'=3, 'medium'=2, 'low'=1
-     confirmDelete(id)        → Deletes task after confirmation dialog
-
-   ── LOCALSTORAGE KEY ─────────────────────────────────────────────────────
-     todo_tasks → Array<{ id, userId, title, description, deadline,
-                          priority, category, status, reminder,
-                          createdAt, completedAt }>
-   ========================================================================= */
-
-
-/* =========================================================================
    1. STORAGE HELPERS
    ========================================================================= */
 
@@ -55,11 +35,11 @@ function isTaskOwnedByCurrentUser(task) {
 
 /** Maps category keys to display labels and CSS color variables. */
 const CATEGORY_MAP = {
-  work:     { label: 'Work',     color: 'var(--cat-work)' },
+  work: { label: 'Work', color: 'var(--cat-work)' },
   personal: { label: 'Personal', color: 'var(--cat-personal)' },
-  school:   { label: 'School',   color: 'var(--cat-school)' },
-  health:   { label: 'Health',   color: 'var(--success)' },
-  other:    { label: 'Other',    color: 'var(--info)' }
+  school: { label: 'School', color: 'var(--cat-school)' },
+  health: { label: 'Health', color: 'var(--success)' },
+  other: { label: 'Other', color: 'var(--info)' }
 };
 
 /** Returns the display label for a category key. */
@@ -140,11 +120,11 @@ function isOverdue(task) {
  */
 function createTaskCard(task) {
   const isCompleted = task.status === 'completed';
-  const overdue     = isOverdue(task);
-  const catLabel    = getCategoryLabel(task.category);
-  const catColor    = getCategoryColor(task.category);
-  const badgeClass  = getPriorityBadgeClass(task.priority);
-  const priority    = task.priority ? task.priority.charAt(0).toUpperCase() + task.priority.slice(1) : 'Low';
+  const overdue = isOverdue(task);
+  const catLabel = getCategoryLabel(task.category);
+  const catColor = getCategoryColor(task.category);
+  const badgeClass = getPriorityBadgeClass(task.priority);
+  const priority = task.priority ? task.priority.charAt(0).toUpperCase() + task.priority.slice(1) : 'Low';
 
   // Deadline display
   let deadlineHTML = '';

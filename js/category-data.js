@@ -22,8 +22,8 @@ function getTaskCategories() {
 
   const categories = parsed.map(category => {
     if (!category || typeof category !== 'object' ||
-        typeof category.id !== 'string' || typeof category.name !== 'string' ||
-        typeof category.icon !== 'string' || !/^#[0-9a-f]{6}$/i.test(category.color)) {
+      typeof category.id !== 'string' || typeof category.name !== 'string' ||
+      typeof category.icon !== 'string' || !/^#[0-9a-f]{6}$/i.test(category.color)) {
       throw new Error('Saved category data is invalid.');
     }
     return {

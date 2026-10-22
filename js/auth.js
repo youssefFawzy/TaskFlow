@@ -1,25 +1,4 @@
 /* =========================================================================
-   TaskFlow — auth.js
-   Owner: Member 2 (User Registration & Authentication)
-
-   Shared authentication logic for TaskFlow.
-   Manages user accounts, active sessions, validation, and role protection.
-
-   ── FUNCTIONS FOR OTHER MEMBERS ──────────────────────────────────────────
-     requireLogin(allowGuest = true)  → Redirects to login.html if not logged in
-     requireAdmin()                   → Redirects non-admins to tasks.html
-     logoutUser()                     → Clears session and redirects to login.html
-     getCurrentUser()                 → Returns active user object or null/guest
-     isLoggedIn()                     → Returns boolean (true if user or guest)
-     isAdmin()                        → Returns boolean (true if role === 'admin')
-     isGuest()                        → Returns boolean (true if session.isGuest)
-
-   ── LOCALSTORAGE KEYS ────────────────────────────────────────────────────
-     todo_users   → Array<{ id, name, email, password, role, createdAt, lastLogin }>
-     todo_session → Object<{ userId, isGuest, loginAt }>
-   ========================================================================= */
-
-/* =========================================================================
    1. STORAGE ACCESSORS & SEEDING
    ========================================================================= */
 

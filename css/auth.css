@@ -1,21 +1,4 @@
 /* =========================================================================
-   TaskFlow — auth.css
-   Owner: Member 2 (User Registration & Authentication)
-   
-   Styles for:
-     1. Auth Pages Layout (login.html, register.html)
-     2. Auth Card & Branding Header
-     3. Password Inputs & Eye Toggle
-     4. Password Strength Meter
-     5. Error Banners & Alerts
-     6. Quick Test Credentials Helper
-     7. Profile Page Layout & Header Card
-     8. Profile Stats Grid
-     9. Profile Settings Sections & Danger Zone
-    10. Responsive Tweaks
-   ========================================================================= */
-
-/* =========================================================================
    1. AUTH PAGES LAYOUT
    ========================================================================= */
 .auth-page {
@@ -78,6 +61,7 @@
     opacity: 0;
     transform: translateY(16px) scale(0.98);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -203,20 +187,40 @@
 }
 
 /* Strength states */
-.strength-weak .strength-segment:nth-child(1) { background-color: var(--danger); }
-.strength-weak .strength-text { color: var(--danger); }
+.strength-weak .strength-segment:nth-child(1) {
+  background-color: var(--danger);
+}
+
+.strength-weak .strength-text {
+  color: var(--danger);
+}
 
 .strength-fair .strength-segment:nth-child(1),
-.strength-fair .strength-segment:nth-child(2) { background-color: var(--warning); }
-.strength-fair .strength-text { color: var(--warning); }
+.strength-fair .strength-segment:nth-child(2) {
+  background-color: var(--warning);
+}
+
+.strength-fair .strength-text {
+  color: var(--warning);
+}
 
 .strength-good .strength-segment:nth-child(1),
 .strength-good .strength-segment:nth-child(2),
-.strength-good .strength-segment:nth-child(3) { background-color: var(--info); }
-.strength-good .strength-text { color: var(--info); }
+.strength-good .strength-segment:nth-child(3) {
+  background-color: var(--info);
+}
 
-.strength-strong .strength-segment { background-color: var(--success) !important; }
-.strength-strong .strength-text { color: var(--success); }
+.strength-good .strength-text {
+  color: var(--info);
+}
+
+.strength-strong .strength-segment {
+  background-color: var(--success) !important;
+}
+
+.strength-strong .strength-text {
+  color: var(--success);
+}
 
 /* =========================================================================
    5. ERROR BANNERS & ALERTS
@@ -234,8 +238,15 @@
 }
 
 @keyframes alertFadeIn {
-  from { opacity: 0; transform: translateY(-4px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .auth-alert-error {
@@ -459,9 +470,20 @@
   margin-bottom: var(--space-2);
 }
 
-.stat-icon-wrapper.success { color: var(--success); background: var(--success-soft); }
-.stat-icon-wrapper.warning { color: var(--warning); background: var(--warning-soft); }
-.stat-icon-wrapper.info    { color: var(--info);    background: var(--info-soft); }
+.stat-icon-wrapper.success {
+  color: var(--success);
+  background: var(--success-soft);
+}
+
+.stat-icon-wrapper.warning {
+  color: var(--warning);
+  background: var(--warning-soft);
+}
+
+.stat-icon-wrapper.info {
+  color: var(--info);
+  background: var(--info-soft);
+}
 
 /* =========================================================================
    9. SETTINGS SECTIONS & DANGER ZONE

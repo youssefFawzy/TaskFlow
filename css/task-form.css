@@ -1,19 +1,4 @@
 /* =========================================================================
-   TaskFlow — task-form.css
-   Owner: Member 3 (Task Creation, Management & Prioritization)
-
-   Styles for:
-     1. Task Form Layout (two-column: form + live preview)
-     2. Form Sections & Field Groups
-     3. Priority Selector Cards
-     4. Date/Time Row
-     5. Character Counter
-     6. Form Actions Bar
-     7. Live Preview Panel
-     8. Responsive
-   ========================================================================= */
-
-/* =========================================================================
    1. TASK FORM LAYOUT
    ========================================================================= */
 .task-form-layout {
@@ -100,28 +85,46 @@
 }
 
 /* Low */
-.priority-card[data-priority="low"] .priority-dot { background: var(--priority-low); }
+.priority-card[data-priority="low"] .priority-dot {
+  background: var(--priority-low);
+}
+
 .priority-card[data-priority="low"].selected {
   border-color: var(--priority-low);
   background: var(--success-soft);
 }
-.priority-card[data-priority="low"].selected .priority-label { color: var(--priority-low); }
+
+.priority-card[data-priority="low"].selected .priority-label {
+  color: var(--priority-low);
+}
 
 /* Medium */
-.priority-card[data-priority="medium"] .priority-dot { background: var(--priority-medium); }
+.priority-card[data-priority="medium"] .priority-dot {
+  background: var(--priority-medium);
+}
+
 .priority-card[data-priority="medium"].selected {
   border-color: var(--priority-medium);
   background: var(--warning-soft);
 }
-.priority-card[data-priority="medium"].selected .priority-label { color: var(--priority-medium); }
+
+.priority-card[data-priority="medium"].selected .priority-label {
+  color: var(--priority-medium);
+}
 
 /* High */
-.priority-card[data-priority="high"] .priority-dot { background: var(--priority-high); }
+.priority-card[data-priority="high"] .priority-dot {
+  background: var(--priority-high);
+}
+
 .priority-card[data-priority="high"].selected {
   border-color: var(--priority-high);
   background: var(--danger-soft);
 }
-.priority-card[data-priority="high"].selected .priority-label { color: var(--priority-high); }
+
+.priority-card[data-priority="high"].selected .priority-label {
+  color: var(--priority-high);
+}
 
 /* =========================================================================
    4. DATE / TIME ROW
@@ -148,8 +151,13 @@
   pointer-events: none;
 }
 
-.char-counter.warn { color: var(--warning); }
-.char-counter.limit { color: var(--danger); }
+.char-counter.warn {
+  color: var(--warning);
+}
+
+.char-counter.limit {
+  color: var(--danger);
+}
 
 /* =========================================================================
    6. FORM ACTIONS BAR
@@ -219,6 +227,7 @@
   .task-form-layout {
     grid-template-columns: 1fr;
   }
+
   .preview-panel {
     position: static;
   }
@@ -228,16 +237,20 @@
   .priority-selector {
     grid-template-columns: 1fr;
   }
+
   .datetime-row {
     grid-template-columns: 1fr;
   }
+
   .form-actions {
     flex-wrap: wrap;
   }
+
   .form-actions .btn-danger {
     margin-left: 0;
     width: 100%;
   }
+
   .task-form-panel {
     padding: var(--space-4);
   }

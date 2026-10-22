@@ -1,22 +1,4 @@
 /* =========================================================================
-   TaskFlow — task-form.js
-   Owner: Member 3 (Task Creation, Management & Prioritization)
-
-   Page-specific logic for task-form.html (Add / Edit task).
-   Depends on: layout.js, auth.js, task-actions.js
-
-   ── FUNCTIONS ─────────────────────────────────────────────────────────────
-     initForm()              → Detects add/edit mode, sets up listeners
-     loadTaskIntoForm(task)  → Populates form fields for editing
-     validateTaskForm()      → Validates required fields, returns boolean
-     createTask()            → Builds new task and saves to localStorage
-     updateTask()            → Updates existing task in localStorage
-     deleteTask()            → Deletes task (called from delete button)
-     updatePreview()         → Refreshes the live preview card
-   ========================================================================= */
-
-
-/* =========================================================================
    1. STATE
    ========================================================================= */
 let editingTaskId = null;       // null = add mode, string = edit mode
@@ -46,10 +28,10 @@ function initForm() {
   const params = new URLSearchParams(window.location.search);
   editingTaskId = params.get('id');
 
-  const formTitle    = document.getElementById('form-title');
+  const formTitle = document.getElementById('form-title');
   const formSubtitle = document.getElementById('form-subtitle');
-  const deleteBtn    = document.getElementById('delete-task-btn');
-  const saveBtn      = document.getElementById('save-task-btn');
+  const deleteBtn = document.getElementById('delete-task-btn');
+  const saveBtn = document.getElementById('save-task-btn');
 
   if (editingTaskId) {
     // ─── EDIT MODE ───
@@ -134,10 +116,10 @@ function populateTaskCategoryOptions() {
  * @param {Object} task - The task from localStorage.
  */
 function loadTaskIntoForm(task) {
-  document.getElementById('task-title').value       = task.title || '';
+  document.getElementById('task-title').value = task.title || '';
   document.getElementById('task-description').value = task.description || '';
-  document.getElementById('task-category').value    = task.category || 'other';
-  document.getElementById('task-reminder').value    = task.reminder || 'none';
+  document.getElementById('task-category').value = task.category || 'other';
+  document.getElementById('task-reminder').value = task.reminder || 'none';
 
   // Date and time from deadline
   if (task.deadline) {
@@ -186,7 +168,7 @@ function highlightPriority(priority) {
 
 function setupCharCounter() {
   const textarea = document.getElementById('task-description');
-  const counter  = document.getElementById('char-counter');
+  const counter = document.getElementById('char-counter');
   if (!textarea || !counter) return;
 
   textarea.addEventListener('input', updateCharCounter);
@@ -195,7 +177,7 @@ function setupCharCounter() {
 
 function updateCharCounter() {
   const textarea = document.getElementById('task-description');
-  const counter  = document.getElementById('char-counter');
+  const counter = document.getElementById('char-counter');
   if (!textarea || !counter) return;
 
   const len = textarea.value.length;
@@ -229,12 +211,12 @@ function updatePreview() {
   const container = document.getElementById('preview-card-container');
   if (!container) return;
 
-  const title       = document.getElementById('task-title').value.trim();
+  const title = document.getElementById('task-title').value.trim();
   const description = document.getElementById('task-description').value.trim();
-  const date        = document.getElementById('task-date').value;
-  const time        = document.getElementById('task-time').value;
-  const category    = document.getElementById('task-category').value;
-  const reminder    = document.getElementById('task-reminder').value;
+  const date = document.getElementById('task-date').value;
+  const time = document.getElementById('task-time').value;
+  const category = document.getElementById('task-category').value;
+  const reminder = document.getElementById('task-reminder').value;
 
   // If title is empty, show placeholder
   if (!title) {
@@ -248,15 +230,15 @@ function updatePreview() {
 
   // Build a temporary task object for preview
   const previewTask = {
-    id:          editingTaskId || 'preview',
-    title:       title,
+    id: editingTaskId || 'preview',
+    title: title,
     description: description,
-    deadline:    date && time ? `${date}T${time}` : (date ? `${date}T00:00` : ''),
-    priority:    selectedPriority,
-    category:    category,
-    status:      editingTaskId ? (getTaskById(editingTaskId)?.status || 'pending') : 'pending',
-    reminder:    reminder,
-    createdAt:   new Date().toISOString(),
+    deadline: date && time ? `${date}T${time}` : (date ? `${date}T00:00` : ''),
+    priority: selectedPriority,
+    category: category,
+    status: editingTaskId ? (getTaskById(editingTaskId)?.status || 'pending') : 'pending',
+    reminder: reminder,
+    createdAt: new Date().toISOString(),
     completedAt: null
   };
 
@@ -323,16 +305,16 @@ function createTask() {
   const currentUser = getCurrentUser();
 
   const newTask = {
-    id:          't_' + Date.now(),
-    userId:      currentUser ? currentUser.id : 'guest',
-    title:       document.getElementById('task-title').value.trim(),
+    id: 't_' + Date.now(),
+    userId: currentUser ? currentUser.id : 'guest',
+    title: document.getElementById('task-title').value.trim(),
     description: document.getElementById('task-description').value.trim(),
-    deadline:    document.getElementById('task-date').value + 'T' + document.getElementById('task-time').value,
-    priority:    selectedPriority,
-    category:    document.getElementById('task-category').value,
-    status:      'pending',
-    reminder:    document.getElementById('task-reminder').value,
-    createdAt:   new Date().toISOString(),
+    deadline: document.getElementById('task-date').value + 'T' + document.getElementById('task-time').value,
+    priority: selectedPriority,
+    category: document.getElementById('task-category').value,
+    status: 'pending',
+    reminder: document.getElementById('task-reminder').value,
+    createdAt: new Date().toISOString(),
     completedAt: null
   };
 
@@ -361,12 +343,12 @@ function updateTask() {
 
   tasks[index] = {
     ...tasks[index],
-    title:       document.getElementById('task-title').value.trim(),
+    title: document.getElementById('task-title').value.trim(),
     description: document.getElementById('task-description').value.trim(),
-    deadline:    document.getElementById('task-date').value + 'T' + document.getElementById('task-time').value,
-    priority:    selectedPriority,
-    category:    document.getElementById('task-category').value,
-    reminder:    document.getElementById('task-reminder').value
+    deadline: document.getElementById('task-date').value + 'T' + document.getElementById('task-time').value,
+    priority: selectedPriority,
+    category: document.getElementById('task-category').value,
+    reminder: document.getElementById('task-reminder').value
   };
 
   saveTasks(tasks);

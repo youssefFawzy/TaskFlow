@@ -1,23 +1,4 @@
 /* =========================================================================
-   TaskFlow — task-card.css
-   Owner: Member 3 (Task Creation, Management & Prioritization)
-
-   ⚠️  Shared with Member 4 — this file is loaded on both
-       task-form.html (live preview) and tasks.html (task list).
-
-   Styles for:
-     1. Task Card Base
-     2. Priority Stripe
-     3. Card Header (title, checkbox, actions)
-     4. Card Body (description, metadata)
-     5. Category Tag
-     6. Deadline & Overdue
-     7. Completed State
-     8. Card Actions
-     9. Responsive
-   ========================================================================= */
-
-/* =========================================================================
    1. TASK CARD BASE
    ========================================================================= */
 .task-card {
@@ -46,9 +27,17 @@
   background: var(--card-priority);
 }
 
-.task-card[data-priority="low"]    { --card-priority: var(--priority-low); }
-.task-card[data-priority="medium"] { --card-priority: var(--priority-medium); }
-.task-card[data-priority="high"]   { --card-priority: var(--priority-high); }
+.task-card[data-priority="low"] {
+  --card-priority: var(--priority-low);
+}
+
+.task-card[data-priority="medium"] {
+  --card-priority: var(--priority-medium);
+}
+
+.task-card[data-priority="high"] {
+  --card-priority: var(--priority-high);
+}
 
 /* =========================================================================
    3. CARD HEADER
@@ -126,6 +115,7 @@
   line-height: 1.5;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -141,11 +131,25 @@
 /* =========================================================================
    5. CATEGORY TAG
    ========================================================================= */
-.task-card[data-category="work"]     { --tag-color: var(--cat-work); }
-.task-card[data-category="personal"] { --tag-color: var(--cat-personal); }
-.task-card[data-category="school"]   { --tag-color: var(--cat-school); }
-.task-card[data-category="health"]   { --tag-color: var(--success); }
-.task-card[data-category="other"]    { --tag-color: var(--info); }
+.task-card[data-category="work"] {
+  --tag-color: var(--cat-work);
+}
+
+.task-card[data-category="personal"] {
+  --tag-color: var(--cat-personal);
+}
+
+.task-card[data-category="school"] {
+  --tag-color: var(--cat-school);
+}
+
+.task-card[data-category="health"] {
+  --tag-color: var(--success);
+}
+
+.task-card[data-category="other"] {
+  --tag-color: var(--info);
+}
 
 /* =========================================================================
    6. DEADLINE & OVERDUE
