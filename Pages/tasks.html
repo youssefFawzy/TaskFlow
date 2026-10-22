@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Tasks · TaskFlow</title>
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/task-card.css">
+  <link rel="stylesheet" href="../css/tasks.css">
+</head>
+<body>
+
+  <div class="app-layout">
+    <aside id="sidebar" class="sidebar"></aside>
+    <div class="app-main">
+      <header id="topbar" class="topbar"></header>
+      <main class="main-content">
+        <section class="page-header">
+          <div>
+            <h1 class="page-title">My Tasks</h1>
+            <p class="page-subtitle">Plan your day and keep every deadline in sight.</p>
+          </div>
+          <a href="task-form.html" class="btn btn-primary" id="add-task-btn">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+            Add task
+          </a>
+        </section>
+
+        <section class="grid grid-4 tasks-stats" id="stats-bar" aria-label="Task overview">
+          <article class="card stat-card task-stat">
+            <span class="stat-label">Total tasks</span><strong class="stat-value" id="stat-total">0</strong>
+          </article>
+          <article class="card stat-card task-stat task-stat-completed">
+            <span class="stat-label">Completed</span><strong class="stat-value" id="stat-completed">0</strong>
+          </article>
+          <article class="card stat-card task-stat task-stat-pending">
+            <span class="stat-label">Pending</span><strong class="stat-value" id="stat-pending">0</strong>
+          </article>
+          <article class="card stat-card task-stat task-stat-overdue">
+            <span class="stat-label">Overdue</span><strong class="stat-value" id="stat-overdue">0</strong>
+          </article>
+        </section>
+
+        <section class="card task-controls" aria-label="Search, filter, and sort tasks">
+          <div class="tasks-toolbar" id="toolbar">
+            <label class="input-wrapper tasks-search">
+              <span class="sr-only">Search tasks by title</span>
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+              <input class="input" type="search" id="search-input" placeholder="Search your tasks…" autocomplete="off">
+            </label>
+            <button class="btn btn-secondary view-toggle" id="view-toggle" type="button" aria-pressed="false">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+              Grid view
+            </button>
+          </div>
+
+          <div class="tasks-filters" id="filters">
+            <label class="form-group">
+              <span class="label">Category</span>
+              <select class="select" id="filter-category"><option value="all">All categories</option></select>
+            </label>
+            <label class="form-group">
+              <span class="label">Priority</span>
+              <select class="select" id="filter-priority">
+                <option value="all">All priorities</option>
+                <option value="high">High</option><option value="medium">Medium</option><option value="low">Low</option>
+              </select>
+            </label>
+            <label class="form-group">
+              <span class="label">Status</span>
+              <select class="select" id="filter-status">
+                <option value="all">All statuses</option>
+                <option value="pending">Pending</option><option value="completed">Completed</option><option value="overdue">Overdue</option>
+              </select>
+            </label>
+            <label class="form-group" id="sort">
+              <span class="label">Sort by</span>
+              <select class="select" id="sort-by">
+                <option value="deadline">Deadline</option><option value="priority">Priority</option>
+                <option value="category">Category</option><option value="newest">Newest</option>
+              </select>
+            </label>
+            <label class="form-group sort-order-group">
+              <span class="label">Order</span>
+              <select class="select" id="sort-order">
+                <option value="asc">Ascending</option><option value="desc">Descending</option>
+              </select>
+            </label>
+          </div>
+        </section>
+
+        <div class="task-list-heading">
+          <h2>Tasks</h2>
+          <p class="text-muted text-sm" id="task-result-count" aria-live="polite"></p>
+        </div>
+        <section class="task-list" id="task-list" aria-live="polite"></section>
+        <section class="card empty-state tasks-empty hidden" id="empty-state">
+          <div class="empty-state-icon">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          </div>
+          <h3 id="empty-state-title">No tasks yet</h3>
+          <p class="text-muted" id="empty-state-message">Add your first task and it will show up here.</p>
+          <a href="task-form.html" class="btn btn-primary mt-4" id="empty-state-add">Create a task</a>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <div class="bg-glow" aria-hidden="true"></div>
+  <script src="../js/layout.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/category-data.js"></script>
+  <script src="../js/task-actions.js"></script>
+  <script src="../js/tasks.js"></script>
+  <script>
+    initPage('tasks', 'My Tasks', 'Stay organized');
+    initTasksPage();
+  </script>
+</body>
+</html>

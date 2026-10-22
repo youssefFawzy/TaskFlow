@@ -1,0 +1,495 @@
+/* =========================================================================
+   TaskFlow — auth.css
+   Owner: Member 2 (User Registration & Authentication)
+   
+   Styles for:
+     1. Auth Pages Layout (login.html, register.html)
+     2. Auth Card & Branding Header
+     3. Password Inputs & Eye Toggle
+     4. Password Strength Meter
+     5. Error Banners & Alerts
+     6. Quick Test Credentials Helper
+     7. Profile Page Layout & Header Card
+     8. Profile Stats Grid
+     9. Profile Settings Sections & Danger Zone
+    10. Responsive Tweaks
+   ========================================================================= */
+
+/* =========================================================================
+   1. AUTH PAGES LAYOUT
+   ========================================================================= */
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: var(--space-6) var(--space-4);
+  position: relative;
+  overflow-x: hidden;
+}
+
+.auth-page::before {
+  content: '';
+  position: fixed;
+  top: -15%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 650px;
+  height: 650px;
+  border-radius: 50%;
+  background: radial-gradient(circle, hsl(252 92% 67% / 0.16) 0%, hsl(188 92% 55% / 0.06) 50%, transparent 70%);
+  filter: blur(60px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.auth-nav {
+  position: fixed;
+  top: var(--space-4);
+  left: var(--space-6);
+  right: var(--space-6);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 20;
+}
+
+/* =========================================================================
+   2. AUTH CARD & BRANDING
+   ========================================================================= */
+.auth-card {
+  width: 100%;
+  max-width: 440px;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6);
+  backdrop-filter: var(--blur);
+  -webkit-backdrop-filter: var(--blur);
+  box-shadow: var(--shadow-lg), 0 0 0 1px hsl(252 92% 67% / 0.05);
+  position: relative;
+  z-index: 10;
+  animation: authCardIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes authCardIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.auth-header {
+  text-align: center;
+  margin-bottom: var(--space-5);
+}
+
+.auth-logo-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-lg);
+  background: var(--gradient);
+  color: #fff;
+  box-shadow: var(--glow);
+  margin-bottom: var(--space-3);
+  text-decoration: none;
+  transition: transform var(--transition);
+}
+
+.auth-logo-badge:hover {
+  transform: scale(1.05);
+}
+
+.auth-logo-badge .icon {
+  width: 28px;
+  height: 28px;
+}
+
+.auth-header h1 {
+  font-size: var(--fs-2xl);
+  font-family: var(--font-heading);
+  letter-spacing: -0.02em;
+  margin-bottom: var(--space-1);
+}
+
+.auth-header p {
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+}
+
+/* =========================================================================
+   3. PASSWORD INPUTS & EYE TOGGLE
+   ========================================================================= */
+.password-wrapper {
+  position: relative;
+}
+
+.password-wrapper .input {
+  padding-right: 2.85rem;
+}
+
+.password-toggle-btn {
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: var(--text-faint);
+  padding: 0.4rem;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: color var(--transition);
+}
+
+.password-toggle-btn:hover {
+  color: var(--text);
+}
+
+.password-toggle-btn .icon {
+  width: 18px;
+  height: 18px;
+}
+
+/* =========================================================================
+   4. PASSWORD STRENGTH METER
+   ========================================================================= */
+.strength-meter {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin-top: 0.25rem;
+}
+
+.strength-bar-track {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  height: 4px;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  background: var(--surface-hover);
+}
+
+.strength-segment {
+  height: 100%;
+  background: var(--surface-hover);
+  border-radius: 2px;
+  transition: background-color 0.25s ease;
+}
+
+.strength-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+}
+
+.strength-text {
+  font-weight: 600;
+  transition: color 0.25s ease;
+}
+
+/* Strength states */
+.strength-weak .strength-segment:nth-child(1) { background-color: var(--danger); }
+.strength-weak .strength-text { color: var(--danger); }
+
+.strength-fair .strength-segment:nth-child(1),
+.strength-fair .strength-segment:nth-child(2) { background-color: var(--warning); }
+.strength-fair .strength-text { color: var(--warning); }
+
+.strength-good .strength-segment:nth-child(1),
+.strength-good .strength-segment:nth-child(2),
+.strength-good .strength-segment:nth-child(3) { background-color: var(--info); }
+.strength-good .strength-text { color: var(--info); }
+
+.strength-strong .strength-segment { background-color: var(--success) !important; }
+.strength-strong .strength-text { color: var(--success); }
+
+/* =========================================================================
+   5. ERROR BANNERS & ALERTS
+   ========================================================================= */
+.auth-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius);
+  font-size: var(--fs-sm);
+  margin-bottom: var(--space-4);
+  line-height: 1.4;
+  animation: alertFadeIn 0.25s ease;
+}
+
+@keyframes alertFadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.auth-alert-error {
+  background: var(--danger-soft);
+  border: 1px solid var(--danger);
+  color: hsl(352 95% 85%);
+}
+
+.auth-alert-error .icon {
+  color: var(--danger);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.auth-alert-success {
+  background: var(--success-soft);
+  border: 1px solid var(--success);
+  color: hsl(152 90% 85%);
+}
+
+.auth-alert-success .icon {
+  color: var(--success);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* =========================================================================
+   6. QUICK TEST CREDENTIALS & DIVIDERS
+   ========================================================================= */
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: var(--space-4) 0;
+  color: var(--text-faint);
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.quick-demo-pill {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.85rem;
+  background: var(--primary-soft);
+  border: 1px dashed var(--primary);
+  border-radius: var(--radius);
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+  margin-bottom: var(--space-4);
+  cursor: pointer;
+  transition: background var(--transition), border-color var(--transition);
+}
+
+.quick-demo-pill:hover {
+  background: hsl(252 92% 67% / 0.22);
+}
+
+.quick-demo-pill code {
+  color: var(--primary-hover);
+  font-weight: 600;
+  background: transparent;
+  padding: 0;
+}
+
+.auth-footer {
+  text-align: center;
+  margin-top: var(--space-5);
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+}
+
+.auth-footer a {
+  color: var(--primary-hover);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.auth-footer a:hover {
+  text-decoration: underline;
+}
+
+/* =========================================================================
+   7. PROFILE PAGE LAYOUT & HEADER CARD
+   ========================================================================= */
+.profile-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.profile-hero-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6);
+  backdrop-filter: var(--blur);
+}
+
+@media (min-width: 640px) {
+  .profile-hero-card {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.profile-user-info-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.profile-avatar-large {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: var(--gradient);
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-size: var(--fs-2xl);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  box-shadow: var(--glow);
+  flex-shrink: 0;
+  text-transform: uppercase;
+}
+
+.profile-user-meta h2 {
+  font-size: var(--fs-xl);
+  font-family: var(--font-heading);
+  line-height: 1.2;
+}
+
+.profile-user-meta .email {
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+  margin-top: 2px;
+}
+
+.profile-badges {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.profile-hero-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+/* Guest Banner */
+.guest-callout-banner {
+  background: var(--warning-soft);
+  border: 1px solid var(--warning);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4) var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+@media (min-width: 640px) {
+  .guest-callout-banner {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.guest-callout-content {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.guest-callout-content .icon {
+  color: var(--warning);
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+/* =========================================================================
+   8. PROFILE STATS GRID
+   ========================================================================= */
+.profile-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: var(--space-4);
+}
+
+.stat-icon-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius);
+  background: var(--surface-hover);
+  color: var(--primary);
+  margin-bottom: var(--space-2);
+}
+
+.stat-icon-wrapper.success { color: var(--success); background: var(--success-soft); }
+.stat-icon-wrapper.warning { color: var(--warning); background: var(--warning-soft); }
+.stat-icon-wrapper.info    { color: var(--info);    background: var(--info-soft); }
+
+/* =========================================================================
+   9. SETTINGS SECTIONS & DANGER ZONE
+   ========================================================================= */
+.profile-settings-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-5);
+}
+
+@media (min-width: 800px) {
+  .profile-settings-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.danger-zone-card {
+  border-color: hsl(352 86% 63% / 0.35);
+  background: color-mix(in srgb, var(--surface) 95%, var(--danger) 5%);
+}
+
+.danger-zone-header {
+  color: var(--danger);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.danger-zone-header .icon {
+  color: var(--danger);
+}

@@ -1,0 +1,1238 @@
+/* =========================================================================
+   TaskFlow — main.css  (Shared Design System)
+   Owner: Member 1 (Team Lead)
+
+   ⚠️  Used by EVERY page. Do NOT edit without telling Member 1.
+       Use these classes in your pages instead of writing new ones.
+
+   Contents
+     1. Design tokens (variables) — dark (default) + light theme
+     2. Reset & base
+     3. App layout (sidebar, topbar, main content)
+     4. Buttons
+     5. Forms
+     6. Cards, badges & tags
+     7. Modal
+     8. Toast notifications
+     9. Empty state, spinner, misc components
+    10. Utilities
+    11. Animations
+    12. Responsive
+   ========================================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap');
+
+/* =========================================================================
+   1. DESIGN TOKENS
+   ========================================================================= */
+:root,
+[data-theme="dark"] {
+  /* Backgrounds */
+  --bg:            hsl(232 32% 7%);
+  --bg-elevated:   hsl(232 26% 11%);
+  --surface:       hsl(232 24% 14% / 0.72);
+  --surface-solid: hsl(232 24% 14%);
+  --surface-hover: hsl(232 24% 19% / 0.85);
+  --border:        hsl(230 40% 85% / 0.09);
+  --border-strong: hsl(230 40% 85% / 0.18);
+
+  /* Text */
+  --text:        hsl(230 35% 96%);
+  --text-muted:  hsl(230 16% 68%);
+  --text-faint:  hsl(230 12% 48%);
+
+  /* Brand */
+  --primary:        hsl(252 92% 67%);
+  --primary-hover:  hsl(252 92% 72%);
+  --primary-soft:   hsl(252 92% 67% / 0.14);
+  --accent:         hsl(188 92% 55%);
+  --gradient:       linear-gradient(135deg, hsl(252 92% 67%) 0%, hsl(218 92% 62%) 50%, hsl(188 92% 55%) 100%);
+  --gradient-soft:  linear-gradient(135deg, hsl(252 92% 67% / 0.18), hsl(188 92% 55% / 0.12));
+
+  /* Status */
+  --success:      hsl(152 62% 50%);
+  --success-soft: hsl(152 62% 50% / 0.14);
+  --warning:      hsl(36 96% 58%);
+  --warning-soft: hsl(36 96% 58% / 0.14);
+  --danger:       hsl(352 86% 63%);
+  --danger-soft:  hsl(352 86% 63% / 0.14);
+  --info:         hsl(205 92% 62%);
+  --info-soft:    hsl(205 92% 62% / 0.14);
+
+  /* Priorities (Feature 4) */
+  --priority-low:    var(--success);
+  --priority-medium: var(--warning);
+  --priority-high:   var(--danger);
+
+  /* Default categories (Feature 6) */
+  --cat-work:     hsl(220 92% 64%);
+  --cat-personal: hsl(322 82% 66%);
+  --cat-school:   hsl(45 96% 58%);
+
+  /* Typography */
+  --font-heading: 'Outfit', system-ui, sans-serif;
+  --font-body:    'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --fs-xs:   0.75rem;
+  --fs-sm:   0.875rem;
+  --fs-base: 1rem;
+  --fs-lg:   1.125rem;
+  --fs-xl:   1.375rem;
+  --fs-2xl:  1.75rem;
+  --fs-3xl:  2.25rem;
+  --fs-4xl:  clamp(2.4rem, 5vw, 3.75rem);
+
+  /* Spacing (4px scale) */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+
+  /* Shape & depth */
+  --radius-sm:   8px;
+  --radius:      12px;
+  --radius-lg:   18px;
+  --radius-xl:   26px;
+  --radius-full: 999px;
+  --shadow-sm: 0 2px 8px hsl(235 40% 2% / 0.25);
+  --shadow:    0 10px 30px hsl(235 40% 2% / 0.35);
+  --shadow-lg: 0 24px 60px hsl(235 40% 2% / 0.5);
+  --glow:      0 8px 30px hsl(252 92% 67% / 0.35);
+  --blur:      blur(18px);
+
+  /* Motion */
+  --ease:       cubic-bezier(0.22, 1, 0.36, 1);
+  --transition: 0.25s var(--ease);
+
+  /* Layout */
+  --sidebar-width: 260px;
+  --topbar-height: 72px;
+
+  color-scheme: dark;
+}
+
+[data-theme="light"] {
+  --bg:            hsl(230 40% 97%);
+  --bg-elevated:   hsl(0 0% 100%);
+  --surface:       hsl(0 0% 100% / 0.8);
+  --surface-solid: hsl(0 0% 100%);
+  --surface-hover: hsl(230 40% 95%);
+  --border:        hsl(230 25% 20% / 0.08);
+  --border-strong: hsl(230 25% 20% / 0.16);
+
+  --text:       hsl(232 32% 14%);
+  --text-muted: hsl(230 14% 42%);
+  --text-faint: hsl(230 10% 60%);
+
+  --primary-soft: hsl(252 92% 67% / 0.1);
+
+  --shadow-sm: 0 2px 8px hsl(232 40% 40% / 0.08);
+  --shadow:    0 10px 30px hsl(232 40% 40% / 0.1);
+  --shadow-lg: 0 24px 60px hsl(232 40% 40% / 0.16);
+
+  color-scheme: light;
+}
+
+/* =========================================================================
+   2. RESET & BASE
+   ========================================================================= */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100vh;
+  font-family: var(--font-body);
+  font-size: var(--fs-base);
+  line-height: 1.6;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  transition: background-color var(--transition), color var(--transition);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img, svg {
+  display: block;
+  max-width: 100%;
+}
+
+button, input, select, textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+::selection {
+  background: var(--primary);
+  color: #fff;
+}
+
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: var(--radius-full);
+  border: 2px solid var(--bg);
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.text-gradient {
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Soft background glow used on app pages */
+.bg-glow {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(600px circle at 85% -10%, hsl(252 92% 67% / 0.12), transparent 60%),
+    radial-gradient(500px circle at 0% 100%, hsl(188 92% 55% / 0.08), transparent 60%);
+}
+
+/* =========================================================================
+   3. APP LAYOUT  (used by all pages after login)
+      <div class="app-layout">
+        <aside id="sidebar" class="sidebar"></aside>
+        <div class="app-main">
+          <header id="topbar" class="topbar"></header>
+          <main class="main-content"> ... </main>
+        </div>
+      </div>
+   ========================================================================= */
+.app-layout {
+  display: grid;
+  grid-template-columns: var(--sidebar-width) 1fr;
+  min-height: 100vh;
+}
+
+/* ---- Sidebar ---- */
+.sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding: var(--space-5) var(--space-4);
+  background: var(--bg-elevated);
+  border-right: 1px solid var(--border);
+  z-index: 50;
+  transition: transform var(--transition);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  font-family: var(--font-heading);
+  font-size: var(--fs-xl);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.brand-logo {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
+  background: var(--gradient);
+  box-shadow: var(--glow);
+  color: #fff;
+}
+
+.brand-logo .icon {
+  width: 22px;
+  height: 22px;
+  stroke-width: 3;
+}
+
+.nav-section-title {
+  padding: 0 var(--space-3);
+  margin-bottom: var(--space-2);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-faint);
+}
+
+.nav-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.nav-link {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border-radius: var(--radius);
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  color: var(--text-muted);
+  transition: background var(--transition), color var(--transition), transform var(--transition);
+}
+
+.nav-link:hover {
+  color: var(--text);
+  background: var(--surface-hover);
+  transform: translateX(3px);
+}
+
+.nav-link.active {
+  color: var(--text);
+  background: var(--primary-soft);
+}
+
+.nav-link.active::before {
+  content: '';
+  position: absolute;
+  left: -16px;
+  top: 20%;
+  bottom: 20%;
+  width: 4px;
+  border-radius: 0 4px 4px 0;
+  background: var(--gradient);
+}
+
+.nav-link.active .icon {
+  color: var(--primary);
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.sidebar-user {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border-radius: var(--radius);
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
+.sidebar-user-info {
+  min-width: 0;
+  flex: 1;
+}
+
+.sidebar-user-name {
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar-user-role {
+  font-size: var(--fs-xs);
+  color: var(--text-faint);
+  text-transform: capitalize;
+}
+
+.avatar {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--gradient);
+  color: #fff;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.sidebar-backdrop {
+  display: none;
+}
+
+/* ---- Main area ---- */
+.app-main {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  height: var(--topbar-height);
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: 0 var(--space-6);
+  background: color-mix(in srgb, var(--bg) 75%, transparent);
+  backdrop-filter: var(--blur);
+  -webkit-backdrop-filter: var(--blur);
+  border-bottom: 1px solid var(--border);
+}
+
+.topbar-title {
+  font-size: var(--fs-xl);
+}
+
+.topbar-subtitle {
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+}
+
+.topbar-actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.menu-toggle {
+  display: none;
+}
+
+.main-content {
+  flex: 1;
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: var(--space-6);
+  animation: fadeIn 0.4s var(--ease);
+}
+
+.page-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.page-title {
+  font-size: var(--fs-2xl);
+}
+
+.page-subtitle {
+  margin-top: var(--space-1);
+  color: var(--text-muted);
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--space-5);
+}
+
+/* =========================================================================
+   4. BUTTONS
+      <button class="btn btn-primary">Save</button>
+      Variants: btn-primary | btn-secondary | btn-ghost | btn-danger | btn-success
+      Sizes:    btn-sm | btn-lg      Shape: btn-icon | btn-block
+   ========================================================================= */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: 0.7rem 1.25rem;
+  border-radius: var(--radius);
+  border: 1px solid transparent;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: nowrap;
+  user-select: none;
+  transition: transform var(--transition), box-shadow var(--transition),
+              background var(--transition), border-color var(--transition), color var(--transition);
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn:disabled,
+.btn.is-loading {
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.btn-primary {
+  color: #fff;
+  background: var(--gradient);
+  background-size: 150% 150%;
+  box-shadow: var(--glow);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  background-position: 100% 0;
+  box-shadow: 0 12px 34px hsl(252 92% 67% / 0.45);
+}
+
+.btn-secondary {
+  background: var(--surface);
+  border-color: var(--border-strong);
+}
+
+.btn-secondary:hover {
+  background: var(--surface-hover);
+  border-color: var(--primary);
+}
+
+.btn-ghost {
+  color: var(--text-muted);
+}
+
+.btn-ghost:hover {
+  color: var(--text);
+  background: var(--surface-hover);
+}
+
+.btn-danger {
+  color: #fff;
+  background: var(--danger);
+}
+
+.btn-danger:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 26px hsl(352 86% 63% / 0.4);
+}
+
+.btn-success {
+  color: #fff;
+  background: var(--success);
+}
+
+.btn-success:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 26px hsl(152 62% 50% / 0.4);
+}
+
+.btn-sm {
+  padding: 0.45rem 0.85rem;
+  font-size: var(--fs-xs);
+  border-radius: var(--radius-sm);
+}
+
+.btn-lg {
+  padding: 0.95rem 1.75rem;
+  font-size: var(--fs-base);
+  border-radius: var(--radius-lg);
+}
+
+.btn-block {
+  width: 100%;
+}
+
+.btn-icon {
+  position: relative;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  border-radius: var(--radius);
+  color: var(--text-muted);
+}
+
+.btn-icon:hover {
+  color: var(--text);
+  background: var(--surface-hover);
+}
+
+.btn-icon .dot {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: var(--radius-full);
+  background: var(--danger);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 18px;
+  text-align: center;
+}
+
+/* =========================================================================
+   5. FORMS
+      <div class="form-group">
+        <label class="label" for="x">Title</label>
+        <input class="input" id="x">
+        <p class="error-text">Required</p>
+      </div>
+   ========================================================================= */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-4);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.label {
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.label .required {
+  color: var(--danger);
+}
+
+.input,
+.select,
+.textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border-strong);
+  background: var(--bg-elevated);
+  font-size: var(--fs-sm);
+  transition: border-color var(--transition), box-shadow var(--transition), background var(--transition);
+}
+
+.input::placeholder,
+.textarea::placeholder {
+  color: var(--text-faint);
+}
+
+.input:hover,
+.select:hover,
+.textarea:hover {
+  border-color: hsl(252 92% 67% / 0.5);
+}
+
+.input:focus,
+.select:focus,
+.textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px var(--primary-soft);
+}
+
+.textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+.select {
+  appearance: none;
+  padding-right: 2.5rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%238a8fa8' stroke-width='2' stroke-linecap='round' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.9rem center;
+}
+
+.input-wrapper {
+  position: relative;
+}
+
+.input-wrapper > .icon {
+  position: absolute;
+  left: 0.9rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-faint);
+  pointer-events: none;
+}
+
+.input-wrapper > .input {
+  padding-left: 2.75rem;
+}
+
+.input.is-invalid,
+.select.is-invalid,
+.textarea.is-invalid {
+  border-color: var(--danger);
+  box-shadow: 0 0 0 4px var(--danger-soft);
+}
+
+.input.is-valid {
+  border-color: var(--success);
+}
+
+.error-text {
+  font-size: var(--fs-xs);
+  color: var(--danger);
+  min-height: 1em;
+}
+
+.hint-text {
+  font-size: var(--fs-xs);
+  color: var(--text-faint);
+}
+
+.checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.checkbox input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--primary);
+  cursor: pointer;
+}
+
+/* =========================================================================
+   6. CARDS, BADGES & TAGS
+   ========================================================================= */
+.card {
+  padding: var(--space-5);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  backdrop-filter: var(--blur);
+  -webkit-backdrop-filter: var(--blur);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.card-title {
+  font-size: var(--fs-lg);
+}
+
+.grid {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.grid-2 { grid-template-columns: repeat(2, 1fr); }
+.grid-3 { grid-template-columns: repeat(3, 1fr); }
+.grid-4 { grid-template-columns: repeat(4, 1fr); }
+
+/* Stat card: <div class="card stat-card"><span class="stat-label">..</span><strong class="stat-value">..</strong></div> */
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.stat-label {
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+}
+
+.stat-value {
+  font-family: var(--font-heading);
+  font-size: var(--fs-3xl);
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+/* Badges: <span class="badge badge-high">High</span> */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-full);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  line-height: 1.4;
+  white-space: nowrap;
+  background: var(--surface-hover);
+  color: var(--text-muted);
+}
+
+.badge::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.badge.no-dot::before { display: none; }
+
+.badge-low,     .badge-success { color: var(--priority-low);    background: var(--success-soft); }
+.badge-medium,  .badge-warning { color: var(--priority-medium); background: var(--warning-soft); }
+.badge-high,    .badge-danger  { color: var(--priority-high);   background: var(--danger-soft); }
+.badge-info                    { color: var(--info);            background: var(--info-soft); }
+.badge-primary                 { color: var(--primary);         background: var(--primary-soft); }
+
+/* Category tag: <span class="tag" style="--tag-color: var(--cat-work)">Work</span> */
+.tag {
+  --tag-color: var(--primary);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--tag-color);
+  background: color-mix(in srgb, var(--tag-color) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--tag-color) 30%, transparent);
+}
+
+.divider {
+  height: 1px;
+  background: var(--border);
+  border: none;
+  margin: var(--space-4) 0;
+}
+
+/* =========================================================================
+   7. MODAL   (open/close with openModal(id) / closeModal(id) from layout.js)
+      <div class="modal-overlay" id="my-modal">
+        <div class="modal">
+          <div class="modal-header"><h3>Title</h3>
+            <button class="btn-icon" data-close-modal>✕</button></div>
+          <div class="modal-body">...</div>
+          <div class="modal-footer">...</div>
+        </div>
+      </div>
+   ========================================================================= */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: var(--space-4);
+  background: hsl(235 40% 3% / 0.6);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--transition), visibility var(--transition);
+}
+
+.modal-overlay.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal {
+  width: 100%;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: var(--radius-xl);
+  background: var(--surface-solid);
+  border: 1px solid var(--border-strong);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(20px) scale(0.96);
+  transition: transform 0.35s var(--ease);
+}
+
+.modal-overlay.open .modal {
+  transform: none;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-5) var(--space-5) 0;
+}
+
+.modal-header h3 {
+  font-size: var(--fs-xl);
+}
+
+.modal-body {
+  padding: var(--space-4) var(--space-5);
+  color: var(--text-muted);
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  padding: 0 var(--space-5) var(--space-5);
+}
+
+.modal-icon {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  margin-bottom: var(--space-3);
+  border-radius: 16px;
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
+.modal-icon.danger {
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+
+.modal-icon .icon {
+  width: 26px;
+  height: 26px;
+}
+
+/* =========================================================================
+   8. TOAST NOTIFICATIONS   (showToast(message, type) from layout.js)
+   ========================================================================= */
+.toast-container {
+  position: fixed;
+  right: var(--space-5);
+  bottom: var(--space-5);
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  pointer-events: none;
+}
+
+.toast {
+  --toast-color: var(--info);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 280px;
+  max-width: 380px;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius);
+  background: var(--surface-solid);
+  border: 1px solid var(--border-strong);
+  border-left: 4px solid var(--toast-color);
+  box-shadow: var(--shadow-lg);
+  font-size: var(--fs-sm);
+  pointer-events: auto;
+  animation: toastIn 0.4s var(--ease);
+}
+
+.toast .icon {
+  color: var(--toast-color);
+}
+
+.toast-message {
+  flex: 1;
+}
+
+.toast-close {
+  color: var(--text-faint);
+  display: grid;
+  place-items: center;
+}
+
+.toast-close:hover {
+  color: var(--text);
+}
+
+.toast-success { --toast-color: var(--success); }
+.toast-error   { --toast-color: var(--danger); }
+.toast-warning { --toast-color: var(--warning); }
+.toast-info    { --toast-color: var(--info); }
+
+.toast.hide {
+  animation: toastOut 0.3s var(--ease) forwards;
+}
+
+/* =========================================================================
+   9. EMPTY STATE, SPINNER, MISC
+   ========================================================================= */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-8) var(--space-5);
+  text-align: center;
+  color: var(--text-muted);
+  border: 2px dashed var(--border-strong);
+  border-radius: var(--radius-lg);
+}
+
+.empty-state-icon {
+  display: grid;
+  place-items: center;
+  width: 72px;
+  height: 72px;
+  border-radius: 22px;
+  background: var(--gradient-soft);
+  color: var(--primary);
+}
+
+.empty-state-icon .icon {
+  width: 32px;
+  height: 32px;
+}
+
+.empty-state h3 {
+  color: var(--text);
+  font-size: var(--fs-xl);
+}
+
+.spinner {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 3px solid var(--border-strong);
+  border-top-color: var(--primary);
+  animation: spin 0.8s linear infinite;
+}
+
+/* Under-construction box used by the starter pages (delete when you build your page) */
+.wip-card {
+  max-width: 720px;
+}
+
+.wip-card ul {
+  list-style: disc;
+  padding-left: var(--space-5);
+  color: var(--text-muted);
+}
+
+.wip-card li + li {
+  margin-top: var(--space-1);
+}
+
+.wip-card code {
+  font-size: var(--fs-sm);
+  color: var(--accent);
+}
+
+/* =========================================================================
+   10. UTILITIES
+   ========================================================================= */
+.hidden        { display: none !important; }
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+.flex          { display: flex; }
+.flex-col      { display: flex; flex-direction: column; }
+.items-center  { align-items: center; }
+.justify-between { justify-content: space-between; }
+.wrap          { flex-wrap: wrap; }
+.gap-1 { gap: var(--space-1); }
+.gap-2 { gap: var(--space-2); }
+.gap-3 { gap: var(--space-3); }
+.gap-4 { gap: var(--space-4); }
+.gap-5 { gap: var(--space-5); }
+.mt-2 { margin-top: var(--space-2); }
+.mt-4 { margin-top: var(--space-4); }
+.mt-6 { margin-top: var(--space-6); }
+.mb-2 { margin-bottom: var(--space-2); }
+.mb-4 { margin-bottom: var(--space-4); }
+.mb-6 { margin-bottom: var(--space-6); }
+.w-full       { width: 100%; }
+.text-center  { text-align: center; }
+.text-muted   { color: var(--text-muted); }
+.text-faint   { color: var(--text-faint); }
+.text-sm      { font-size: var(--fs-sm); }
+.text-xs      { font-size: var(--fs-xs); }
+.text-success { color: var(--success); }
+.text-warning { color: var(--warning); }
+.text-danger  { color: var(--danger); }
+.fw-600       { font-weight: 600; }
+.truncate     { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* =========================================================================
+   11. ANIMATIONS
+   ========================================================================= */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(40px) scale(0.95); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes toastOut {
+  to { opacity: 0; transform: translateX(40px) scale(0.95); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.06); }
+}
+
+.animate-fade  { animation: fadeIn 0.4s var(--ease) both; }
+.animate-slide { animation: slideUp 0.5s var(--ease) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* =========================================================================
+   12. RESPONSIVE
+   ========================================================================= */
+@media (max-width: 1024px) {
+  .grid-4 { grid-template-columns: repeat(2, 1fr); }
+  .grid-3 { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 860px) {
+  .app-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: var(--sidebar-width);
+    transform: translateX(-100%);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .sidebar.open {
+    transform: none;
+  }
+
+  .sidebar-backdrop.show {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 45;
+    background: hsl(235 40% 3% / 0.55);
+    backdrop-filter: blur(3px);
+  }
+
+  .menu-toggle {
+    display: inline-flex;
+  }
+
+  .topbar {
+    padding: 0 var(--space-4);
+  }
+
+  .main-content {
+    padding: var(--space-5) var(--space-4);
+  }
+}
+
+@media (max-width: 600px) {
+  .grid-2,
+  .grid-3,
+  .grid-4 {
+    grid-template-columns: 1fr;
+  }
+
+  .topbar-subtitle {
+    display: none;
+  }
+
+  .toast-container {
+    left: var(--space-4);
+    right: var(--space-4);
+  }
+
+  .toast {
+    min-width: 0;
+    max-width: none;
+  }
+
+  .modal-footer {
+    flex-direction: column-reverse;
+  }
+
+  .modal-footer .btn {
+    width: 100%;
+  }
+}

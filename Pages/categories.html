@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Categories · TaskFlow</title>
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/categories.css">
+</head>
+<body>
+
+  <div class="app-layout">
+    <aside id="sidebar" class="sidebar"></aside>
+    <div class="app-main">
+      <header id="topbar" class="topbar"></header>
+      <main class="main-content">
+        <section class="page-header">
+          <div>
+            <h1 class="page-title">Categories</h1>
+            <p class="page-subtitle">Group your tasks into spaces that work for you.</p>
+          </div>
+        </section>
+
+        <section class="card category-form-card">
+          <div class="card-header">
+            <div>
+              <h2 class="card-title">Create a category</h2>
+              <p class="text-muted text-sm mt-2">Choose a name, color, and icon to make it easy to spot.</p>
+            </div>
+          </div>
+          <form id="add-category-form" class="category-form">
+            <label class="form-group category-name-field" for="category-name">
+              <span class="label">Category name</span>
+              <input class="input" id="category-name" name="name" type="text" maxlength="32" placeholder="e.g. Side projects" required>
+            </label>
+            <label class="form-group category-icon-field" for="category-icon">
+              <span class="label">Icon</span>
+              <input class="input" id="category-icon" name="icon" type="text" maxlength="8" value="✨" aria-describedby="category-icon-hint">
+              <span class="hint-text" id="category-icon-hint">An emoji or short symbol</span>
+            </label>
+            <label class="form-group category-color-field" for="category-color">
+              <span class="label">Color</span>
+              <input class="input color-input" id="category-color" name="color" type="color" value="#8b78ff">
+            </label>
+            <button class="btn btn-primary category-submit" type="submit">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+              Add category
+            </button>
+          </form>
+        </section>
+
+        <div class="categories-heading">
+          <div>
+            <h2>All categories</h2>
+            <p class="text-muted text-sm mt-2">Select a category to see its tasks.</p>
+          </div>
+          <span class="badge badge-primary no-dot" id="category-count">0 categories</span>
+        </div>
+        <section class="categories-grid" id="categories-grid" aria-live="polite"></section>
+
+        <div class="modal-overlay" id="edit-category-modal" role="dialog" aria-modal="true" aria-labelledby="edit-category-title">
+          <div class="modal">
+            <div class="modal-header">
+              <h2 id="edit-category-title">Edit category</h2>
+              <button class="btn-icon" type="button" data-close-modal aria-label="Close dialog">
+                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+              </button>
+            </div>
+            <form id="edit-category-form">
+              <div class="modal-body category-edit-fields">
+                <input type="hidden" id="edit-category-id">
+                <label class="form-group" for="edit-category-name">
+                  <span class="label">Category name</span>
+                  <input class="input" id="edit-category-name" type="text" maxlength="32" required>
+                </label>
+                <div class="category-edit-row">
+                  <label class="form-group" for="edit-category-icon">
+                    <span class="label">Icon</span>
+                    <input class="input" id="edit-category-icon" type="text" maxlength="8">
+                  </label>
+                  <label class="form-group" for="edit-category-color">
+                    <span class="label">Color</span>
+                    <input class="input color-input" id="edit-category-color" type="color">
+                  </label>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-close-modal>Cancel</button>
+                <button class="btn btn-primary" type="submit">Save changes</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div class="bg-glow" aria-hidden="true"></div>
+  <script src="../js/layout.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/category-data.js"></script>
+  <script src="../js/task-actions.js"></script>
+  <script src="../js/categories.js"></script>
+  <script>
+    initPage('categories', 'Categories', 'Organize your tasks');
+    initCategoriesPage();
+  </script>
+</body>
+</html>

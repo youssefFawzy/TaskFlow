@@ -1,0 +1,132 @@
+.tasks-stats {
+  margin-bottom: var(--space-5);
+}
+
+.task-stat {
+  position: relative;
+  overflow: hidden;
+  min-height: 132px;
+}
+
+.task-stat::after {
+  content: '';
+  position: absolute;
+  right: -24px;
+  bottom: -48px;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: var(--primary-soft);
+}
+
+.task-stat .stat-value {
+  position: relative;
+  z-index: 1;
+  color: var(--primary);
+}
+
+.task-stat-completed .stat-value { color: var(--success); }
+.task-stat-pending .stat-value { color: var(--warning); }
+.task-stat-overdue .stat-value { color: var(--danger); }
+
+.task-controls {
+  margin-bottom: var(--space-6);
+}
+
+.tasks-toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.tasks-search {
+  flex: 1;
+}
+
+.tasks-search .icon {
+  width: 18px;
+  height: 18px;
+}
+
+.view-toggle {
+  flex-shrink: 0;
+}
+
+.tasks-filters {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(130px, 1fr));
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--border);
+}
+
+.tasks-filters .form-group {
+  min-width: 0;
+}
+
+.tasks-filters .select {
+  min-width: 0;
+  padding: 0.65rem 2rem 0.65rem 0.75rem;
+}
+
+.task-list-heading,
+.categories-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.task-list-heading h2,
+.categories-heading h2 {
+  font-size: var(--fs-xl);
+}
+
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.task-list.is-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+}
+
+.task-list.is-grid .task-card {
+  height: 100%;
+}
+
+.tasks-empty {
+  margin-top: var(--space-5);
+}
+
+@media (max-width: 960px) {
+  .tasks-filters {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 680px) {
+  .tasks-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .tasks-filters {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .task-list.is-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 420px) {
+  .tasks-filters {
+    grid-template-columns: 1fr;
+  }
+}

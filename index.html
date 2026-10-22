@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TaskFlow · Organize Your Tasks, Deadlines & Priorities</title>
+  <meta name="description" content="TaskFlow is a web-based to-do list app to create, organize and prioritize tasks with deadlines, reminders, categories, filtering and sorting.">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/landing.css">
+</head>
+<body class="landing">
+
+  <!-- ===================== HEADER ===================== -->
+  <header class="site-header" id="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="brand" id="header-brand">
+        <span class="brand-logo">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+        </span>
+        <span>Task<span class="text-gradient">Flow</span></span>
+      </a>
+
+      <nav class="site-nav" id="site-nav" aria-label="Main">
+        <a href="#features" class="site-nav-link">Features</a>
+        <a href="#how-it-works" class="site-nav-link">How it works</a>
+        <a href="#priorities" class="site-nav-link">Priorities</a>
+        <div class="site-nav-actions">
+          <a href="Pages/login.html" class="btn btn-ghost" id="header-login-btn">Log in</a>
+          <a href="Pages/register.html" class="btn btn-primary" id="header-signup-btn">Sign up free</a>
+        </div>
+      </nav>
+
+      <div class="header-tools">
+        <button class="btn-icon" id="theme-toggle" aria-label="Change theme"></button>
+        <button class="btn-icon nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ===================== HERO ===================== -->
+    <section class="hero" id="hero">
+      <div class="container hero-inner">
+        <div class="hero-text">
+          <span class="pill reveal">
+            <span class="pill-dot"></span> Your tasks, finally under control
+          </span>
+
+          <h1 class="hero-title reveal">
+            Plan smarter.<br>
+            <span class="text-gradient">Finish everything.</span>
+          </h1>
+
+          <p class="hero-subtitle reveal">
+            TaskFlow helps you create, organize and prioritize your tasks with deadlines,
+            reminders and categories, all in one beautiful place.
+          </p>
+
+          <div class="hero-actions reveal">
+            <a href="Pages/register.html" class="btn btn-primary btn-lg" id="hero-get-started">
+              Get started free
+              <svg class="icon" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+            <a href="Pages/tasks.html" class="btn btn-secondary btn-lg" id="hero-guest-btn">
+              Try without account
+            </a>
+          </div>
+
+          <ul class="hero-points reveal">
+            <li><svg class="icon" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> Free to use</li>
+            <li><svg class="icon" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> Login is optional</li>
+            <li><svg class="icon" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> Works on any device</li>
+          </ul>
+        </div>
+
+        <!-- App preview (built with HTML/CSS, no image) -->
+        <div class="hero-visual reveal" aria-hidden="true">
+          <div class="mockup">
+            <div class="mockup-bar">
+              <span></span><span></span><span></span>
+              <p>My Tasks</p>
+            </div>
+
+            <div class="mockup-body">
+              <div class="mockup-stats">
+                <div><strong>12</strong><small>Total</small></div>
+                <div><strong class="text-success">8</strong><small>Done</small></div>
+                <div><strong class="text-danger">1</strong><small>Overdue</small></div>
+              </div>
+
+              <div class="mockup-task">
+                <span class="mockup-check done"></span>
+                <div class="mockup-task-info">
+                  <p class="done-text">Submit assignment</p>
+                  <div class="mockup-meta">
+                    <span class="badge badge-high">High</span>
+                    <span class="tag" style="--tag-color: var(--cat-school)">🎓 School</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mockup-task active">
+                <span class="mockup-check"></span>
+                <div class="mockup-task-info">
+                  <p>Finish project report</p>
+                  <div class="mockup-meta">
+                    <span class="badge badge-high">High</span>
+                    <span class="tag" style="--tag-color: var(--cat-work)">💼 Work</span>
+                    <small class="mockup-due">Due tomorrow</small>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mockup-task">
+                <span class="mockup-check"></span>
+                <div class="mockup-task-info">
+                  <p>Team meeting</p>
+                  <div class="mockup-meta">
+                    <span class="badge badge-medium">Medium</span>
+                    <span class="tag" style="--tag-color: var(--cat-work)">💼 Work</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mockup-task">
+                <span class="mockup-check"></span>
+                <div class="mockup-task-info">
+                  <p>Buy groceries</p>
+                  <div class="mockup-meta">
+                    <span class="badge badge-low">Low</span>
+                    <span class="tag" style="--tag-color: var(--cat-personal)">🏠 Personal</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Floating cards -->
+          <div class="float-card float-reminder">
+            <span class="float-icon">🔔</span>
+            <div>
+              <strong>Reminder</strong>
+              <small>Team meeting in 15 min</small>
+            </div>
+          </div>
+
+          <div class="float-card float-progress">
+            <div class="ring" style="--value: 67">
+              <span>67%</span>
+            </div>
+            <div>
+              <strong>This week</strong>
+              <small>8 of 12 tasks done</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== STATS STRIP ===================== -->
+    <section class="stats-strip" aria-label="App highlights">
+      <div class="container stats-inner">
+        <div class="stat-item reveal"><strong data-count="7">0</strong><span>Core features</span></div>
+        <div class="stat-item reveal"><strong data-count="3">0</strong><span>Priority levels</span></div>
+        <div class="stat-item reveal"><strong data-count="3">0</strong><span>Default categories</span></div>
+        <div class="stat-item reveal"><strong data-count="100" data-suffix="%">0</strong><span>Free to use</span></div>
+      </div>
+    </section>
+
+    <!-- ===================== FEATURES ===================== -->
+    <section class="section" id="features">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="section-label">Features</span>
+          <h2 class="section-title">Everything you need to <span class="text-gradient">stay on track</span></h2>
+          <p class="section-text">Seven powerful features that turn a simple list into your personal productivity system.</p>
+        </div>
+
+        <div class="features-grid">
+          <article class="feature-card reveal" style="--feature-color: var(--primary)">
+            <div class="feature-icon">
+              <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
+            </div>
+            <h3>Sign up &amp; Log in</h3>
+            <p>Create an optional account so your tasks are saved across sessions and devices.</p>
+          </article>
+
+          <article class="feature-card reveal" style="--feature-color: var(--accent)">
+            <div class="feature-icon">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+            </div>
+            <h3>Task Management</h3>
+            <p>Create, update and delete tasks, each with a title, description and deadline.</p>
+          </article>
+
+          <article class="feature-card reveal" style="--feature-color: var(--danger)">
+            <div class="feature-icon">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M4 22V4M4 4h13l-2 4 2 4H4"/></svg>
+            </div>
+            <h3>Prioritization</h3>
+            <p>Mark tasks as low, medium or high priority so you always know what comes first.</p>
+          </article>
+
+          <article class="feature-card reveal" style="--feature-color: var(--warning)">
+            <div class="feature-icon">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+            </div>
+            <h3>Deadlines &amp; Reminders</h3>
+            <p>Set deadlines and get reminders before your upcoming tasks are due.</p>
+          </article>
+
+          <article class="feature-card reveal" style="--feature-color: var(--cat-personal)">
+            <div class="feature-icon">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M20.6 13.4l-7.2 7.2a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg>
+            </div>
+            <h3>Categories</h3>
+            <p>Group your tasks into Work, Personal and School, or create your own.</p>
+          </article>
+
+          <article class="feature-card reveal" style="--feature-color: var(--info)">
+            <div class="feature-icon">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M3 6h13M3 12h9M3 18h5M17 8V20M14 17l3 3 3-3"/></svg>
+            </div>
+            <h3>Filter &amp; Sort</h3>
+            <p>Sort tasks by deadline, priority or category and find anything in seconds.</p>
+          </article>
+
+          <article class="feature-card feature-wide reveal" style="--feature-color: var(--success)">
+            <div class="feature-icon">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 6-6"/></svg>
+            </div>
+            <div>
+              <h3>Admin Dashboard</h3>
+              <p>Admins monitor active users and generate reports on task completion rates and app usage.</p>
+            </div>
+            <div class="mini-chart" aria-hidden="true">
+              <span style="--h: 40%"></span>
+              <span style="--h: 65%"></span>
+              <span style="--h: 50%"></span>
+              <span style="--h: 80%"></span>
+              <span style="--h: 70%"></span>
+              <span style="--h: 95%"></span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== HOW IT WORKS ===================== -->
+    <section class="section section-alt" id="how-it-works">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="section-label">How it works</span>
+          <h2 class="section-title">Get organized in <span class="text-gradient">3 simple steps</span></h2>
+        </div>
+
+        <ol class="steps">
+          <li class="step reveal">
+            <span class="step-number">1</span>
+            <h3>Create an account</h3>
+            <p>Sign up in seconds, or skip it and start as a guest right away.</p>
+          </li>
+          <li class="step reveal">
+            <span class="step-number">2</span>
+            <h3>Add your tasks</h3>
+            <p>Give each task a deadline, a priority and a category.</p>
+          </li>
+          <li class="step reveal">
+            <span class="step-number">3</span>
+            <h3>Stay on top</h3>
+            <p>Filter, sort and get reminders so nothing is ever missed.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ===================== PRIORITIES SHOWCASE ===================== -->
+    <section class="section" id="priorities">
+      <div class="container showcase">
+        <div class="showcase-text reveal">
+          <span class="section-label">Prioritization</span>
+          <h2 class="section-title">Know what matters <span class="text-gradient">right now</span></h2>
+          <p class="section-text">
+            Color-coded priorities and categories make your most important work stand out,
+            so you can focus on the right task at the right time.
+          </p>
+          <a href="Pages/register.html" class="btn btn-primary" id="showcase-btn">
+            Start prioritizing
+            <svg class="icon" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+
+        <div class="priority-stack reveal">
+          <div class="priority-row" style="--row-color: var(--priority-high)">
+            <span class="priority-bar"></span>
+            <div>
+              <strong>High priority</strong>
+              <small>Urgent and important: do it first</small>
+            </div>
+            <span class="badge badge-high">High</span>
+          </div>
+          <div class="priority-row" style="--row-color: var(--priority-medium)">
+            <span class="priority-bar"></span>
+            <div>
+              <strong>Medium priority</strong>
+              <small>Important, but it can wait a little</small>
+            </div>
+            <span class="badge badge-medium">Medium</span>
+          </div>
+          <div class="priority-row" style="--row-color: var(--priority-low)">
+            <span class="priority-bar"></span>
+            <div>
+              <strong>Low priority</strong>
+              <small>Nice to do when you have time</small>
+            </div>
+            <span class="badge badge-low">Low</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== CALL TO ACTION ===================== -->
+    <section class="section" id="cta">
+      <div class="container">
+        <div class="cta-box reveal">
+          <h2>Ready to get things done?</h2>
+          <p>Join TaskFlow today and turn your to-do list into a done list.</p>
+          <div class="hero-actions">
+            <a href="Pages/register.html" class="btn btn-lg cta-btn" id="cta-signup-btn">Create free account</a>
+            <a href="Pages/login.html" class="btn btn-lg cta-btn-outline" id="cta-login-btn">I already have an account</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div>
+        <a href="index.html" class="brand">
+          <span class="brand-logo">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+          </span>
+          <span>Task<span class="text-gradient">Flow</span></span>
+        </a>
+        <p class="footer-text">A web-based to-do list application. Software Engineering Project.</p>
+      </div>
+
+      <div class="footer-links">
+        <div>
+          <h4>Product</h4>
+          <a href="#features">Features</a>
+          <a href="#how-it-works">How it works</a>
+          <a href="#priorities">Priorities</a>
+        </div>
+        <div>
+          <h4>Account</h4>
+          <a href="Pages/login.html">Log in</a>
+          <a href="Pages/register.html">Sign up</a>
+          <a href="Pages/tasks.html">Continue as guest</a>
+        </div>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <p>© <span id="year"></span> TaskFlow Team. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="js/layout.js"></script>
+  <script src="js/landing.js"></script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard · TaskFlow</title>
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+  <div class="app-layout">
+    <aside id="sidebar" class="sidebar"></aside>
+    <div class="app-main">
+      <header id="topbar" class="topbar"></header>
+      <main class="main-content">
+        <!--
+          ╔═══════════════════════════════════════════════════════════════╗
+          ║  Member 5 — Build this page                                  ║
+          ╠═══════════════════════════════════════════════════════════════╣
+          ║                                                               ║
+          ║  ADMIN DASHBOARD (Feature 2: Admin Dashboard)                 ║
+          ║  ⚠️  This page must be admin-only.                             ║
+          ║  Use Member 2's requireAdmin() or check the user's role.      ║
+          ║                                                               ║
+          ║  What to build here:                                          ║
+          ║  ┌──────────────────────────────────────────────┐             ║
+          ║  │  1. #admin-stats  (4 stat cards)             │             ║
+          ║  │     - #total-users                           │             ║
+          ║  │     - #active-users  (logged in last 7 days) │             ║
+          ║  │     - #total-tasks                           │             ║
+          ║  │     - #completion-rate  (%)                  │             ║
+          ║  │                                              │             ║
+          ║  │  2. #charts                                  │             ║
+          ║  │     - <canvas id="completion-chart">         │             ║
+          ║  │       (bar chart: completion rate)            │             ║
+          ║  │     - #category-chart  (tasks per category)  │             ║
+          ║  │     - #priority-chart  (tasks per priority)  │             ║
+          ║  │     ⚠️  Draw with Canvas API, NO libraries   │             ║
+          ║  │                                              │             ║
+          ║  │  3. #users-table                             │             ║
+          ║  │     - Columns: name, email, registered,      │             ║
+          ║  │       last login, tasks count, completed %   │             ║
+          ║  │     - #user-search  (search users)           │             ║
+          ║  │                                              │             ║
+          ║  │  4. #report-section                          │             ║
+          ║  │     - Date range picker                      │             ║
+          ║  │     - #export-csv-btn  (download CSV report) │             ║
+          ║  └──────────────────────────────────────────────┘             ║
+          ║                                                               ║
+          ║  CSS: css/admin.css    JS: js/admin.js                        ║
+          ║  Data: read users from "todo_users" and tasks from            ║
+          ║  "todo_tasks" in localStorage                                 ║
+          ║                                                               ║
+          ║  Shared files you can use:                                    ║
+          ║  • css/main.css: .card, .stat-card, .badge, .grid-4, .btn    ║
+          ║  • js/layout.js: showToast(), icon(), escapeHTML(),           ║
+          ║    formatDate()                                                ║
+          ║                                                               ║
+          ║  DELETE THIS COMMENT BLOCK WHEN YOU START BUILDING.           ║
+          ╚═══════════════════════════════════════════════════════════════╝
+        -->
+
+        <div class="card wip-card">
+          <h2>🛡️ Admin Dashboard</h2>
+          <p class="text-muted mt-2 mb-4">Assigned to <strong>Member 5</strong> — Feature 2</p>
+          <ul>
+            <li>Stats: total users, active users, total tasks, completion rate</li>
+            <li>Charts (pure Canvas, no libraries): completion, categories, priorities</li>
+            <li>Users table: name, email, joined, last login, tasks, completed %</li>
+            <li>Search users</li>
+            <li>Export CSV report</li>
+          </ul>
+          <p class="text-danger mt-4"><strong>⚠️ Admin only:</strong> this page must check the user's role.</p>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div class="bg-glow" aria-hidden="true"></div>
+  <script src="js/layout.js"></script>
+  <script>
+    initPage('admin', 'Admin Dashboard', 'Monitor users & tasks');
+  </script>
+</body>
+</html>

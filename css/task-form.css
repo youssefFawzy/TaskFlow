@@ -1,0 +1,244 @@
+/* =========================================================================
+   TaskFlow — task-form.css
+   Owner: Member 3 (Task Creation, Management & Prioritization)
+
+   Styles for:
+     1. Task Form Layout (two-column: form + live preview)
+     2. Form Sections & Field Groups
+     3. Priority Selector Cards
+     4. Date/Time Row
+     5. Character Counter
+     6. Form Actions Bar
+     7. Live Preview Panel
+     8. Responsive
+   ========================================================================= */
+
+/* =========================================================================
+   1. TASK FORM LAYOUT
+   ========================================================================= */
+.task-form-layout {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: var(--space-6);
+  align-items: start;
+}
+
+.task-form-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6);
+}
+
+.task-form-panel .form-title {
+  font-size: var(--fs-2xl);
+  margin-bottom: var(--space-1);
+}
+
+.task-form-panel .form-subtitle {
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+  margin-bottom: var(--space-5);
+}
+
+/* =========================================================================
+   2. FORM SECTIONS & FIELD GROUPS
+   ========================================================================= */
+.form-section {
+  margin-bottom: var(--space-5);
+}
+
+.form-section-title {
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-faint);
+  margin-bottom: var(--space-4);
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--border);
+}
+
+/* =========================================================================
+   3. PRIORITY SELECTOR CARDS
+   ========================================================================= */
+.priority-selector {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-3);
+}
+
+.priority-selector input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.priority-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-3);
+  border-radius: var(--radius);
+  border: 2px solid var(--border-strong);
+  background: var(--bg-elevated);
+  cursor: pointer;
+  user-select: none;
+}
+
+.priority-card .priority-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+}
+
+.priority-card .priority-label {
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+/* Low */
+.priority-card[data-priority="low"] .priority-dot { background: var(--priority-low); }
+.priority-card[data-priority="low"].selected {
+  border-color: var(--priority-low);
+  background: var(--success-soft);
+}
+.priority-card[data-priority="low"].selected .priority-label { color: var(--priority-low); }
+
+/* Medium */
+.priority-card[data-priority="medium"] .priority-dot { background: var(--priority-medium); }
+.priority-card[data-priority="medium"].selected {
+  border-color: var(--priority-medium);
+  background: var(--warning-soft);
+}
+.priority-card[data-priority="medium"].selected .priority-label { color: var(--priority-medium); }
+
+/* High */
+.priority-card[data-priority="high"] .priority-dot { background: var(--priority-high); }
+.priority-card[data-priority="high"].selected {
+  border-color: var(--priority-high);
+  background: var(--danger-soft);
+}
+.priority-card[data-priority="high"].selected .priority-label { color: var(--priority-high); }
+
+/* =========================================================================
+   4. DATE / TIME ROW
+   ========================================================================= */
+.datetime-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+
+/* =========================================================================
+   5. CHARACTER COUNTER
+   ========================================================================= */
+.textarea-wrapper {
+  position: relative;
+}
+
+.char-counter {
+  position: absolute;
+  bottom: var(--space-2);
+  right: var(--space-3);
+  font-size: var(--fs-xs);
+  color: var(--text-faint);
+  pointer-events: none;
+}
+
+.char-counter.warn { color: var(--warning); }
+.char-counter.limit { color: var(--danger); }
+
+/* =========================================================================
+   6. FORM ACTIONS BAR
+   ========================================================================= */
+.form-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--border);
+}
+
+.form-actions .btn-danger {
+  margin-left: auto;
+}
+
+/* =========================================================================
+   7. LIVE PREVIEW PANEL
+   ========================================================================= */
+.preview-panel {
+  position: sticky;
+  top: calc(var(--topbar-height) + var(--space-6));
+}
+
+.preview-panel .preview-heading {
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-faint);
+  margin-bottom: var(--space-4);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.preview-panel .preview-heading .icon {
+  width: 16px;
+  height: 16px;
+  color: var(--primary);
+}
+
+.preview-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  padding: var(--space-8) var(--space-4);
+  border: 2px dashed var(--border-strong);
+  border-radius: var(--radius-lg);
+  color: var(--text-faint);
+  text-align: center;
+  font-size: var(--fs-sm);
+}
+
+.preview-placeholder .icon {
+  width: 32px;
+  height: 32px;
+  opacity: 0.4;
+}
+
+/* =========================================================================
+   8. RESPONSIVE
+   ========================================================================= */
+@media (max-width: 960px) {
+  .task-form-layout {
+    grid-template-columns: 1fr;
+  }
+  .preview-panel {
+    position: static;
+  }
+}
+
+@media (max-width: 600px) {
+  .priority-selector {
+    grid-template-columns: 1fr;
+  }
+  .datetime-row {
+    grid-template-columns: 1fr;
+  }
+  .form-actions {
+    flex-wrap: wrap;
+  }
+  .form-actions .btn-danger {
+    margin-left: 0;
+    width: 100%;
+  }
+  .task-form-panel {
+    padding: var(--space-4);
+  }
+}

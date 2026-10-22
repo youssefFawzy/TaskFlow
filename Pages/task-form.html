@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Task · TaskFlow</title>
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/task-form.css">
+  <link rel="stylesheet" href="../css/task-card.css">
+</head>
+<body>
+
+  <div class="app-layout">
+    <aside id="sidebar" class="sidebar"></aside>
+    <div class="app-main">
+      <header id="topbar" class="topbar"></header>
+      <main class="main-content">
+
+        <!-- Page Header -->
+        <div class="page-header">
+          <div>
+            <h2 class="page-title" id="form-title">Add New Task</h2>
+            <p class="page-subtitle" id="form-subtitle">Create a new task to stay on track</p>
+          </div>
+        </div>
+
+        <!-- Two-column layout: Form + Preview -->
+        <div class="task-form-layout">
+
+          <!-- ═══ LEFT: Task Form ═══ -->
+          <div class="task-form-panel">
+            <form id="task-form" class="form" novalidate>
+
+              <!-- ── Details Section ── -->
+              <div class="form-section">
+                <p class="form-section-title">Task Details</p>
+
+                <div class="form-group">
+                  <label class="label" for="task-title">Title <span class="required">*</span></label>
+                  <input class="input" type="text" id="task-title"
+                         placeholder="e.g. Finish quarterly report"
+                         maxlength="100" autocomplete="off" required>
+                  <p class="error-text" id="title-error"></p>
+                </div>
+
+                <div class="form-group">
+                  <label class="label" for="task-description">Description</label>
+                  <div class="textarea-wrapper">
+                    <textarea class="textarea" id="task-description"
+                              placeholder="Add some details about this task…"
+                              rows="4"></textarea>
+                    <span class="char-counter" id="char-counter">0 / 500</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ── Deadline Section ── -->
+              <div class="form-section">
+                <p class="form-section-title">Deadline</p>
+
+                <div class="datetime-row">
+                  <div class="form-group">
+                    <label class="label" for="task-date">Date <span class="required">*</span></label>
+                    <input class="input" type="date" id="task-date" required>
+                    <p class="error-text" id="date-error"></p>
+                  </div>
+                  <div class="form-group">
+                    <label class="label" for="task-time">Time <span class="required">*</span></label>
+                    <input class="input" type="time" id="task-time" required>
+                    <p class="error-text" id="time-error"></p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ── Priority Section ── -->
+              <div class="form-section">
+                <p class="form-section-title">Priority</p>
+
+                <div class="priority-selector">
+                  <label class="priority-card" data-priority="low" id="priority-low">
+                    <input type="radio" name="priority" value="low">
+                    <span class="priority-dot"></span>
+                    <span class="priority-label">Low</span>
+                  </label>
+
+                  <label class="priority-card" data-priority="medium" id="priority-medium">
+                    <input type="radio" name="priority" value="medium" checked>
+                    <span class="priority-dot"></span>
+                    <span class="priority-label">Medium</span>
+                  </label>
+
+                  <label class="priority-card" data-priority="high" id="priority-high">
+                    <input type="radio" name="priority" value="high">
+                    <span class="priority-dot"></span>
+                    <span class="priority-label">High</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- ── Category & Reminder Section ── -->
+              <div class="form-section">
+                <p class="form-section-title">Organisation</p>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label class="label" for="task-category">Category</label>
+                    <select class="select" id="task-category">
+                      <option value="work">Work</option>
+                      <option value="personal">Personal</option>
+                      <option value="school">School</option>
+                      <option value="health">Health</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label class="label" for="task-reminder">Reminder</label>
+                    <select class="select" id="task-reminder">
+                      <option value="none">None</option>
+                      <option value="15min">15 minutes before</option>
+                      <option value="1hour">1 hour before</option>
+                      <option value="1day">1 day before</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ── Action Buttons ── -->
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary" id="save-task-btn">
+                  <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+                  Add Task
+                </button>
+                <a href="tasks.html" class="btn btn-secondary" id="cancel-btn">Cancel</a>
+                <button type="button" class="btn btn-danger hidden" id="delete-task-btn">
+                  <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+                  Delete
+                </button>
+              </div>
+
+            </form>
+          </div>
+
+          <!-- ═══ RIGHT: Live Preview ═══ -->
+          <div class="preview-panel">
+            <p class="preview-heading">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              Live Preview
+            </p>
+            <div id="preview-card-container">
+              <div class="preview-placeholder">
+                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>
+                <p>Start typing to see a live preview of your task card</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div class="bg-glow" aria-hidden="true"></div>
+  <script src="../js/layout.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/category-data.js"></script>
+  <script src="../js/task-actions.js"></script>
+  <script src="../js/task-form.js"></script>
+  <script>
+    initPage('task-form', 'Add Task');
+    initForm();
+  </script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calendar · TaskFlow</title>
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/task-card.css">
+  <link rel="stylesheet" href="../css/calendar.css">
+</head>
+<body>
+
+  <div class="app-layout">
+    <aside id="sidebar" class="sidebar"></aside>
+    <div class="app-main">
+      <header id="topbar" class="topbar"></header>
+      <main class="main-content">
+        <section class="page-header">
+          <div>
+            <h1 class="page-title">Calendar</h1>
+            <p class="page-subtitle">See the deadlines coming up for your tasks.</p>
+          </div>
+          <a class="btn btn-primary" href="task-form.html">Add task</a>
+        </section>
+
+        <section class="calendar-layout">
+          <div class="card calendar-card">
+            <div class="calendar-header" id="calendar-header">
+              <div>
+                <h2 id="month-title"></h2>
+                <p class="text-muted text-sm">Select a day to see its tasks.</p>
+              </div>
+              <div class="calendar-nav">
+                <button class="btn btn-secondary btn-sm" type="button" id="today-btn">Today</button>
+                <button class="btn-icon" type="button" id="prev-month" aria-label="Previous month">
+                  <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+                </button>
+                <button class="btn-icon" type="button" id="next-month" aria-label="Next month">
+                  <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="calendar-grid" id="calendar-grid" role="grid" aria-label="Monthly calendar"></div>
+            <div class="calendar-legend" aria-label="Priority legend">
+              <span><i class="priority-dot high"></i> High priority</span>
+              <span><i class="priority-dot medium"></i> Medium priority</span>
+              <span><i class="priority-dot low"></i> Low priority</span>
+            </div>
+          </div>
+
+          <aside class="calendar-side">
+            <section class="card day-panel">
+              <div class="card-header">
+                <h2 class="card-title" id="day-panel-title">Tasks for today</h2>
+                <span class="badge badge-primary no-dot" id="day-task-count">0 tasks</span>
+              </div>
+              <div class="calendar-task-list" id="day-panel" aria-live="polite"></div>
+            </section>
+            <section class="card upcoming-panel" id="upcoming">
+              <div class="card-header">
+                <h2 class="card-title">Upcoming deadlines</h2>
+                <span class="text-xs text-muted">Next 7 days</span>
+              </div>
+              <div class="upcoming-list" id="upcoming-list" aria-live="polite"></div>
+            </section>
+          </aside>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <div class="bg-glow" aria-hidden="true"></div>
+  <script src="../js/layout.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/category-data.js"></script>
+  <script src="../js/task-actions.js"></script>
+  <script src="../js/calendar.js"></script>
+  <script>
+    initPage('calendar', 'Calendar', 'See your deadlines');
+    initCalendarPage();
+  </script>
+</body>
+</html>
