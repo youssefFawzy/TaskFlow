@@ -380,6 +380,16 @@ function syncSidebarUser() {
     nameEl.textContent = 'Guest';
     roleEl.textContent = 'Not logged in';
   }
+
+  // Update admin dashboard navigation visibility in sidebar
+  const adminNav = document.getElementById('sidebar-admin-nav');
+  if (adminNav) {
+    if (user && user.role === 'admin') {
+      adminNav.classList.remove('hidden');
+    } else {
+      adminNav.classList.add('hidden');
+    }
+  }
 }
 
 /* =========================================================================
@@ -808,14 +818,6 @@ function setupPasswordToggles() {
 
 // Standalone theme toggle support for login & register pages
 function setupStandaloneThemeToggle() {
-  const btn = document.getElementById('theme-toggle');
-  if (!btn || btn.dataset.bound) return;
-  btn.dataset.bound = 'true';
-  btn.addEventListener('click', () => {
-    if (typeof toggleTheme === 'function') {
-      toggleTheme();
-    }
-  });
   if (typeof applyTheme === 'function') {
     applyTheme();
   }

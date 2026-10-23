@@ -50,11 +50,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // ─── Theme toggle ──────────────────────────────────────────────────
-  const themeToggle = document.getElementById('theme-toggle');
-  if (themeToggle) {
-    themeToggle.addEventListener('click', toggleTheme);
-  }
 
   // ─── Count-up animation for stats ─────────────────────────────────
   // <strong data-count="7">0</strong>  →  counts from 0 to 7

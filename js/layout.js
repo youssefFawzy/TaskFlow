@@ -55,6 +55,27 @@ const ADMIN_LINKS = [
   { page: 'admin', label: 'Admin Dashboard', href: 'admin.html', icon: 'shield' }
 ];
 
+/** Checks if active user has administrator privileges */
+function isCurrentUserAdmin() {
+  if (typeof isAdmin === 'function') {
+    return isAdmin();
+  }
+  try {
+    const sessionRaw = localStorage.getItem('todo_session');
+    if (!sessionRaw) return false;
+    const session = JSON.parse(sessionRaw);
+    if (!session || !session.userId || session.isGuest || session.userId === 'guest') return false;
+
+    const usersRaw = localStorage.getItem('todo_users');
+    if (!usersRaw) return false;
+    const users = JSON.parse(usersRaw);
+    const user = users.find(u => u.id === session.userId);
+    return Boolean(user && user.role === 'admin');
+  } catch (e) {
+    return false;
+  }
+}
+
 
 /* =========================================================================
    3. SIDEBAR
@@ -62,6 +83,8 @@ const ADMIN_LINKS = [
 function renderSidebar(activePage) {
   const sidebar = document.getElementById('sidebar');
   if (!sidebar) return;
+
+  const showAdmin = isCurrentUserAdmin();
 
   // Builds one <li> link; adds "active" to the current page
   function makeLink(link) {
@@ -75,7 +98,7 @@ function renderSidebar(activePage) {
   }
 
   sidebar.innerHTML = `
-    <a href="index.html" class="brand" id="sidebar-brand">
+    <a href="../index.html" class="brand" id="sidebar-brand">
       <span class="brand-logo">${icon('logo')}</span>
       <span>Task<span class="text-gradient">Flow</span></span>
     </a>
@@ -85,7 +108,7 @@ function renderSidebar(activePage) {
       <ul class="nav-list">${MENU_LINKS.map(makeLink).join('')}</ul>
     </nav>
 
-    <nav aria-label="Admin menu">
+    <nav aria-label="Admin menu" id="sidebar-admin-nav" class="${showAdmin ? '' : 'hidden'}">
       <p class="nav-section-title">Admin</p>
       <ul class="nav-list">${ADMIN_LINKS.map(makeLink).join('')}</ul>
     </nav>
@@ -150,7 +173,6 @@ function renderTopbar(title, subtitle = '') {
     </div>`;
 
   document.getElementById('menu-toggle').addEventListener('click', openSidebar);
-  document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
   document.getElementById('notif-bell').addEventListener('click', () => {
     window.location.href = 'calendar.html';
   });
@@ -165,15 +187,27 @@ function applyTheme() {
   const theme = localStorage.getItem('theme') || 'dark';
   document.documentElement.setAttribute('data-theme', theme);
 
-  const button = document.getElementById('theme-toggle');
-  if (button) button.innerHTML = icon(theme === 'dark' ? 'sun' : 'moon');
+  document.querySelectorAll('#theme-toggle').forEach(button => {
+    button.innerHTML = icon(theme === 'dark' ? 'sun' : 'moon');
+  });
 }
 
 function toggleTheme() {
   const current = localStorage.getItem('theme') || 'dark';
-  localStorage.setItem('theme', current === 'dark' ? 'light' : 'dark');
+  const newTheme = current === 'dark' ? 'light' : 'dark';
+  localStorage.setItem('theme', newTheme);
   applyTheme();
+  document.dispatchEvent(new CustomEvent('taskflow:theme-changed', { detail: { theme: newTheme } }));
 }
+
+// Single universal delegated click handler for theme-toggle on any page
+document.addEventListener('click', function (event) {
+  const button = event.target.closest('#theme-toggle');
+  if (button) {
+    event.preventDefault();
+    toggleTheme();
+  }
+});
 
 
 /* =========================================================================
@@ -309,14 +343,67 @@ function formatDate(value) {
 
 
 /* =========================================================================
-   10. PAGE SETUP — call once at the top of your page script
+   10. DEADLINE REMINDERS (Member 5)
+   Updates #notif-bell and #notif-count across all pages
+   ========================================================================= */
+function updateRemindersBadge() {
+  const notifCount = document.getElementById('notif-count');
+  if (!notifCount) return;
+
+  try {
+    const raw = localStorage.getItem('todo_tasks');
+    if (!raw) {
+      notifCount.classList.add('hidden');
+      return;
+    }
+    const tasks = JSON.parse(raw);
+    if (!Array.isArray(tasks)) return;
+
+    let userId = 'guest';
+    try {
+      const session = JSON.parse(localStorage.getItem('todo_session') || '{}');
+      if (session.userId) userId = session.userId;
+    } catch (e) {}
+
+    const now = new Date();
+    // Count user tasks that are pending and due today or within 24 hours (or overdue)
+    const urgentTasks = tasks.filter(t => {
+      const isOwner = t.userId === userId || (!t.userId && userId === 'guest');
+      if (!isOwner || t.status === 'completed' || !t.deadline) return false;
+      const d = new Date(t.deadline);
+      const diffHours = (d - now) / (1000 * 60 * 60);
+      return diffHours <= 24; // overdue or due within 24h
+    });
+
+    if (urgentTasks.length > 0) {
+      notifCount.textContent = urgentTasks.length > 99 ? '99+' : urgentTasks.length;
+      notifCount.classList.remove('hidden');
+      notifCount.setAttribute('title', `${urgentTasks.length} task${urgentTasks.length > 1 ? 's' : ''} due soon or overdue`);
+    } else {
+      notifCount.classList.add('hidden');
+    }
+  } catch (err) {
+    console.error('Error updating reminders badge:', err);
+  }
+}
+
+document.addEventListener('taskflow:tasks-changed', updateRemindersBadge);
+window.addEventListener('storage', function(e) {
+  if (e.key === 'todo_tasks') updateRemindersBadge();
+});
+
+
+/* =========================================================================
+   11. PAGE SETUP — call once at the top of your page script
        initPage('tasks', 'My Tasks', 'Stay organized');
    ========================================================================= */
 function initPage(page, title, subtitle = '') {
   renderSidebar(page);
   renderTopbar(title, subtitle);
+  updateRemindersBadge();
   document.title = `${title} · TaskFlow`;
 }
 
 // Apply the saved theme as soon as the file loads
 applyTheme();
+

@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Dashboard · TaskFlow</title>
-  <link rel="stylesheet" href="css/main.css">
-  <link rel="stylesheet" href="css/admin.css">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/admin.css">
 </head>
 <body>
 
@@ -14,73 +14,280 @@
     <div class="app-main">
       <header id="topbar" class="topbar"></header>
       <main class="main-content">
-        <!--
-          ╔═══════════════════════════════════════════════════════════════╗
-          ║  Member 5 — Build this page                                  ║
-          ╠═══════════════════════════════════════════════════════════════╣
-          ║                                                               ║
-          ║  ADMIN DASHBOARD (Feature 2: Admin Dashboard)                 ║
-          ║  ⚠️  This page must be admin-only.                             ║
-          ║  Use Member 2's requireAdmin() or check the user's role.      ║
-          ║                                                               ║
-          ║  What to build here:                                          ║
-          ║  ┌──────────────────────────────────────────────┐             ║
-          ║  │  1. #admin-stats  (4 stat cards)             │             ║
-          ║  │     - #total-users                           │             ║
-          ║  │     - #active-users  (logged in last 7 days) │             ║
-          ║  │     - #total-tasks                           │             ║
-          ║  │     - #completion-rate  (%)                  │             ║
-          ║  │                                              │             ║
-          ║  │  2. #charts                                  │             ║
-          ║  │     - <canvas id="completion-chart">         │             ║
-          ║  │       (bar chart: completion rate)            │             ║
-          ║  │     - #category-chart  (tasks per category)  │             ║
-          ║  │     - #priority-chart  (tasks per priority)  │             ║
-          ║  │     ⚠️  Draw with Canvas API, NO libraries   │             ║
-          ║  │                                              │             ║
-          ║  │  3. #users-table                             │             ║
-          ║  │     - Columns: name, email, registered,      │             ║
-          ║  │       last login, tasks count, completed %   │             ║
-          ║  │     - #user-search  (search users)           │             ║
-          ║  │                                              │             ║
-          ║  │  4. #report-section                          │             ║
-          ║  │     - Date range picker                      │             ║
-          ║  │     - #export-csv-btn  (download CSV report) │             ║
-          ║  └──────────────────────────────────────────────┘             ║
-          ║                                                               ║
-          ║  CSS: css/admin.css    JS: js/admin.js                        ║
-          ║  Data: read users from "todo_users" and tasks from            ║
-          ║  "todo_tasks" in localStorage                                 ║
-          ║                                                               ║
-          ║  Shared files you can use:                                    ║
-          ║  • css/main.css: .card, .stat-card, .badge, .grid-4, .btn    ║
-          ║  • js/layout.js: showToast(), icon(), escapeHTML(),           ║
-          ║    formatDate()                                                ║
-          ║                                                               ║
-          ║  DELETE THIS COMMENT BLOCK WHEN YOU START BUILDING.           ║
-          ╚═══════════════════════════════════════════════════════════════╝
-        -->
 
-        <div class="card wip-card">
-          <h2>🛡️ Admin Dashboard</h2>
-          <p class="text-muted mt-2 mb-4">Assigned to <strong>Member 5</strong> — Feature 2</p>
-          <ul>
-            <li>Stats: total users, active users, total tasks, completion rate</li>
-            <li>Charts (pure Canvas, no libraries): completion, categories, priorities</li>
-            <li>Users table: name, email, joined, last login, tasks, completed %</li>
-            <li>Search users</li>
-            <li>Export CSV report</li>
-          </ul>
-          <p class="text-danger mt-4"><strong>⚠️ Admin only:</strong> this page must check the user's role.</p>
-        </div>
+        <!-- ── Page Header ── -->
+        <section class="page-header">
+          <div>
+            <h1 class="page-title">Admin Dashboard</h1>
+            <p class="page-subtitle">Monitor registered accounts, task performance, and system activity.</p>
+          </div>
+          <div class="admin-header-actions">
+            <span class="admin-badge-live">
+              <span class="pulse-dot"></span> Live Analytics
+            </span>
+            <button type="button" class="btn btn-secondary btn-sm" id="refresh-admin-btn">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+              Refresh
+            </button>
+          </div>
+        </section>
+
+        <!-- ── 1. Admin Stats Cards (#admin-stats) ── -->
+        <section class="grid grid-4" id="admin-stats" aria-label="System overview statistics">
+          <!-- Total Users -->
+          <article class="card stat-card admin-stat-card" style="--stat-accent: var(--primary)">
+            <div class="admin-stat-top">
+              <span class="stat-label">Total Users</span>
+              <div class="admin-stat-icon">
+                <svg class="icon" viewBox="0 0 24 24"><circle cx="9" cy="8" r="4"/><path d="M2 21c0-4 3-6 7-6s7 2 7 6M16 4a4 4 0 0 1 0 8M22 21c0-3-2-5-4-5.6"/></svg>
+              </div>
+            </div>
+            <strong class="stat-value" id="total-users">0</strong>
+            <div class="admin-stat-trend">
+              <span>Registered accounts</span>
+            </div>
+          </article>
+
+          <!-- Active Users (last 7 days) -->
+          <article class="card stat-card admin-stat-card" style="--stat-accent: var(--success)">
+            <div class="admin-stat-top">
+              <span class="stat-label">Active Users</span>
+              <div class="admin-stat-icon">
+                <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+              </div>
+            </div>
+            <strong class="stat-value" id="active-users">0</strong>
+            <div class="admin-stat-trend positive">
+              <span>Logged in last 7 days</span>
+            </div>
+          </article>
+
+          <!-- Total Tasks -->
+          <article class="card stat-card admin-stat-card" style="--stat-accent: var(--accent)">
+            <div class="admin-stat-top">
+              <span class="stat-label">Total Tasks</span>
+              <div class="admin-stat-icon">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M3.5 6l1.5 1.5L7.5 5M3.5 12l1.5 1.5 2.5-2.5M3.5 18l1.5 1.5 2.5-2.5"/></svg>
+              </div>
+            </div>
+            <strong class="stat-value" id="total-tasks">0</strong>
+            <div class="admin-stat-trend">
+              <span>Across all user accounts</span>
+            </div>
+          </article>
+
+          <!-- Completion Rate -->
+          <article class="card stat-card admin-stat-card" style="--stat-accent: var(--warning)">
+            <div class="admin-stat-top">
+              <span class="stat-label">Completion Rate</span>
+              <div class="admin-stat-icon">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg>
+              </div>
+            </div>
+            <strong class="stat-value" id="completion-rate">0%</strong>
+            <div class="admin-stat-trend">
+              <span>Overall finished tasks</span>
+            </div>
+          </article>
+        </section>
+
+        <!-- ── 2. Charts Section (#charts) ── -->
+        <section id="charts" aria-label="Visual analytics charts">
+          <!-- Completion Rate & Status Bar Chart -->
+          <div class="card chart-card">
+            <div class="chart-card-header">
+              <div>
+                <h3 class="chart-card-title">
+                  <svg class="icon" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 6-6"/></svg>
+                  Task Status Breakdown
+                </h3>
+                <p class="chart-card-subtitle">Completed, pending, and overdue tasks</p>
+              </div>
+            </div>
+            <div class="canvas-container">
+              <canvas id="completion-chart" aria-label="Completion rate bar chart" role="img"></canvas>
+            </div>
+            <div class="chart-legend">
+              <div class="chart-legend-item">
+                <span class="chart-legend-dot" style="background:#10b981"></span>
+                <span>Completed</span>
+              </div>
+              <div class="chart-legend-item">
+                <span class="chart-legend-dot" style="background:#5684f4"></span>
+                <span>Pending</span>
+              </div>
+              <div class="chart-legend-item">
+                <span class="chart-legend-dot" style="background:#ef4444"></span>
+                <span>Overdue</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tasks per Category Chart -->
+          <div class="card chart-card">
+            <div class="chart-card-header">
+              <div>
+                <h3 class="chart-card-title">
+                  <svg class="icon" viewBox="0 0 24 24"><path d="M20.6 13.4l-7.2 7.2a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg>
+                  Tasks by Category
+                </h3>
+                <p class="chart-card-subtitle">Distribution across workspace categories</p>
+              </div>
+            </div>
+            <div class="canvas-container">
+              <canvas id="category-chart" aria-label="Tasks per category chart" role="img"></canvas>
+            </div>
+            <div class="chart-legend" id="category-chart-legend"></div>
+          </div>
+
+          <!-- Tasks per Priority Chart -->
+          <div class="card chart-card">
+            <div class="chart-card-header">
+              <div>
+                <h3 class="chart-card-title">
+                  <svg class="icon" viewBox="0 0 24 24"><path d="M4 22V4M4 4h13l-2 4 2 4H4"/></svg>
+                  Tasks by Priority
+                </h3>
+                <p class="chart-card-subtitle">High, medium, and low urgency tasks</p>
+              </div>
+            </div>
+            <div class="canvas-container">
+              <canvas id="priority-chart" aria-label="Tasks per priority chart" role="img"></canvas>
+            </div>
+            <div class="chart-legend" id="priority-chart-legend"></div>
+          </div>
+        </section>
+
+        <!-- ── 3. Users Table Section (#users-table) ── -->
+        <section class="card" id="users-table" aria-label="User accounts table">
+          <div class="section-header-row">
+            <div class="section-heading-group">
+              <div class="flex items-center gap-2">
+                <h2>Registered Accounts</h2>
+                <span class="badge badge-low" id="users-count-badge">0 users</span>
+              </div>
+              <p>Overview of all user profiles, registration dates, activity, and task progress.</p>
+            </div>
+            <div class="table-search-bar">
+              <div class="input-wrapper" style="width: 100%;">
+                <svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+                <input 
+                  type="search" 
+                  id="user-search" 
+                  class="input" 
+                  placeholder="Search users by name or email…" 
+                  autocomplete="off"
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="admin-data-table">
+              <thead>
+                <tr>
+                  <th>User</th>
+                  <th>Role</th>
+                  <th>Registered</th>
+                  <th>Last Login</th>
+                  <th>Tasks</th>
+                  <th>Completed %</th>
+                  <th class="text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="users-table-body">
+                <!-- Injected dynamically via js/admin.js -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- ── 4. Report Section (#report-section) ── -->
+        <section class="card" id="report-section" aria-label="Report export tools">
+          <div class="section-header-row">
+            <div class="section-heading-group">
+              <div class="flex items-center gap-2">
+                <h2>Generate &amp; Export Report</h2>
+                <span class="badge badge-primary no-dot">CSV Data</span>
+              </div>
+              <p>Filter task records by creation and deadline date range, then download a comprehensive CSV audit report.</p>
+            </div>
+          </div>
+
+          <!-- Date Range Picker & Export Form -->
+          <div class="report-controls-grid">
+            <div class="form-group">
+              <label class="label" for="report-start-date">From Date</label>
+              <div class="input-wrapper">
+                <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                <input type="date" id="report-start-date" class="input">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="label" for="report-end-date">To Date</label>
+              <div class="input-wrapper">
+                <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                <input type="date" id="report-end-date" class="input">
+              </div>
+            </div>
+
+            <button type="button" class="btn btn-primary" id="export-csv-btn">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+              Download CSV Report
+            </button>
+          </div>
+
+          <!-- Quick Presets -->
+          <div class="report-presets">
+            <span class="text-xs text-muted" style="align-self: center;">Quick ranges:</span>
+            <button type="button" class="report-preset-btn active" data-report-preset="30days">Last 30 Days</button>
+            <button type="button" class="report-preset-btn" data-report-preset="7days">Last 7 Days</button>
+            <button type="button" class="report-preset-btn" data-report-preset="all">All Time</button>
+          </div>
+
+          <!-- Summary Box -->
+          <div class="report-summary-box" id="report-summary-box">
+            <span id="report-summary-text">Ready to export tasks matching selected range.</span>
+            <span class="text-xs text-muted">Format: RFC 4180 CSV Standard</span>
+          </div>
+        </section>
+
       </main>
     </div>
   </div>
 
+  <!-- ── User Tasks Detail Modal ── -->
+  <div class="modal-overlay" id="user-tasks-modal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal modal-lg">
+      <div class="modal-header">
+        <div>
+          <h3 id="user-tasks-modal-title">User Tasks</h3>
+        </div>
+        <button class="btn-icon" data-close-modal aria-label="Close modal">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="modal-body" id="user-tasks-modal-content">
+        <!-- Injected dynamically -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-close-modal>Close</button>
+      </div>
+    </div>
+  </div>
+
   <div class="bg-glow" aria-hidden="true"></div>
-  <script src="js/layout.js"></script>
+
+  <!-- Core Scripts -->
+  <script src="../js/layout.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/category-data.js"></script>
+  <script src="../js/task-actions.js"></script>
+  <script src="../js/admin.js"></script>
   <script>
     initPage('admin', 'Admin Dashboard', 'Monitor users & tasks');
+    initAdminDashboard();
   </script>
 </body>
 </html>
