@@ -25,7 +25,7 @@ function getTaskById(id) {
 function isTaskOwnedByCurrentUser(task) {
   if (!task || typeof getCurrentUser !== 'function') return false;
   const user = getCurrentUser();
-  return Boolean(user && task.userId === user.id);
+  return Boolean(user && (user.role === 'admin' || task.userId === user.id));
 }
 
 
@@ -175,6 +175,12 @@ function createTaskCard(task) {
         <span class="badge ${badgeClass}">${escapeHTML(priority)}</span>
         <span class="tag" style="--tag-color: ${catColor}">${escapeHTML(catLabel)}</span>
         ${deadlineHTML}
+        ${typeof isAdmin === 'function' && isAdmin() && task.userId ? (() => {
+          const allUsers = typeof getUsers === 'function' ? getUsers(false) : [];
+          const owner = allUsers.find(u => u.id === task.userId);
+          const ownerName = owner ? (owner.name || owner.email) : 'User';
+          return `<span class="task-user-badge" title="Task owner: ${escapeHTML(ownerName)}">${icon('user')} ${escapeHTML(ownerName)}</span>`;
+        })() : ''}
       </div>
     </div>`;
 }

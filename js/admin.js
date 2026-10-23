@@ -567,6 +567,8 @@ function renderUsersTable(filterQuery = '') {
     return;
   }
 
+  const currentUser = typeof getCurrentUser === 'function' ? getCurrentUser() : null;
+
   tbody.innerHTML = filteredUsers.map(user => {
     // Tasks for this user
     const userTasks = tasks.filter(t => t.userId === user.id);
@@ -600,6 +602,8 @@ function renderUsersTable(filterQuery = '') {
       ? '<span class="badge badge-high">Admin</span>'
       : '<span class="badge badge-low">Member</span>';
 
+    const isSelf = currentUser && currentUser.id === user.id;
+
     return `
       <tr data-user-id="${user.id}">
         <td>
@@ -624,9 +628,20 @@ function renderUsersTable(filterQuery = '') {
           </div>
         </td>
         <td class="text-right">
-          <button type="button" class="btn btn-secondary btn-sm view-user-tasks-btn" data-user-id="${user.id}" data-user-name="${escapeHTML(user.name || user.email)}">
-            View Tasks
-          </button>
+          <div class="table-actions">
+            <button type="button" class="btn btn-secondary btn-sm view-user-tasks-btn" data-user-id="${user.id}" data-user-name="${escapeHTML(user.name || user.email)}" title="View Tasks">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              Tasks
+            </button>
+            <button type="button" class="btn btn-ghost btn-sm edit-user-btn" data-user-id="${user.id}" title="Edit User Account">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              Edit
+            </button>
+            <button type="button" class="btn btn-ghost btn-sm delete-user-btn" data-user-id="${user.id}" data-user-name="${escapeHTML(user.name || user.email)}" ${isSelf ? 'disabled title="Cannot delete your active account"' : 'title="Delete User"'} style="${isSelf ? 'opacity: 0.4; cursor: not-allowed;' : 'color: var(--danger);'}">
+              <svg class="icon" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+              Delete
+            </button>
+          </div>
         </td>
       </tr>`;
   }).join('');
@@ -637,6 +652,23 @@ function renderUsersTable(filterQuery = '') {
       const uid = btn.dataset.userId;
       const uname = btn.dataset.userName;
       openUserTasksModal(uid, uname);
+    });
+  });
+
+  // Attach click listeners to "Edit User" buttons
+  tbody.querySelectorAll('.edit-user-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const uid = btn.dataset.userId;
+      openEditUserModal(uid);
+    });
+  });
+
+  // Attach click listeners to "Delete User" buttons
+  tbody.querySelectorAll('.delete-user-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const uid = btn.dataset.userId;
+      const uname = btn.dataset.userName;
+      await handleDeleteUser(uid, uname);
     });
   });
 }
@@ -691,6 +723,102 @@ function openUserTasksModal(userId, userName) {
     openModal('user-tasks-modal');
   }
 }
+
+/** Open edit user modal with pre-populated values */
+function openEditUserModal(userId) {
+  const users = typeof getUsers === 'function' ? getUsers() : [];
+  const user = users.find(u => u.id === userId);
+  if (!user) {
+    if (typeof showToast === 'function') {
+      showToast('User account not found.', 'error');
+    }
+    return;
+  }
+
+  const idInput = document.getElementById('edit-user-id');
+  const nameInput = document.getElementById('edit-user-name');
+  const emailInput = document.getElementById('edit-user-email');
+  const roleSelect = document.getElementById('edit-user-role');
+  const passInput = document.getElementById('edit-user-password');
+
+  if (idInput) idInput.value = user.id;
+  if (nameInput) nameInput.value = user.name || '';
+  if (emailInput) emailInput.value = user.email || '';
+  if (roleSelect) roleSelect.value = user.role || 'user';
+  if (passInput) passInput.value = '';
+
+  if (typeof openModal === 'function') {
+    openModal('edit-user-modal');
+  }
+}
+
+/** Delete a user and cascade their tasks */
+async function handleDeleteUser(userId, userName) {
+  const currentUser = typeof getCurrentUser === 'function' ? getCurrentUser() : null;
+  if (currentUser && currentUser.id === userId) {
+    if (typeof showToast === 'function') {
+      showToast('You cannot delete your own active administrator account.', 'warning');
+    }
+    return;
+  }
+
+  const users = typeof getUsers === 'function' ? getUsers(false) : [];
+  const targetUser = users.find(u => u.id === userId);
+  if (!targetUser) {
+    if (typeof showToast === 'function') {
+      showToast('User account not found.', 'error');
+    }
+    return;
+  }
+
+  if (targetUser.role === 'admin') {
+    const adminCount = users.filter(u => u.role === 'admin').length;
+    if (adminCount <= 1) {
+      if (typeof showToast === 'function') {
+        showToast('Cannot delete the last remaining administrator account.', 'warning');
+      }
+      return;
+    }
+  }
+
+  const confirmed = typeof confirmDialog === 'function'
+    ? await confirmDialog(
+        'Delete user account?',
+        `Are you sure you want to permanently delete "${targetUser.name || targetUser.email}" and all their tasks? This action cannot be undone.`,
+        true
+      )
+    : confirm(`Delete "${targetUser.name || targetUser.email}" and all their tasks?`);
+
+  if (!confirmed) return;
+
+  // Filter out user from todo_users
+  const remainingUsers = users.filter(u => u.id !== userId);
+  if (typeof saveUsers === 'function') {
+    saveUsers(remainingUsers);
+  } else {
+    localStorage.setItem('todo_users', JSON.stringify(remainingUsers));
+  }
+
+  // Cascade delete all tasks belonging to this user
+  try {
+    let tasks = JSON.parse(localStorage.getItem('todo_tasks') || '[]');
+    const prevCount = tasks.length;
+    tasks = tasks.filter(t => t.userId !== userId);
+    localStorage.setItem('todo_tasks', JSON.stringify(tasks));
+  } catch (e) {
+    console.error('Error cascading task deletions:', e);
+  }
+
+  if (typeof showToast === 'function') {
+    showToast(`User "${targetUser.name || targetUser.email}" and their tasks were deleted.`, 'success');
+  }
+
+  renderDashboardStats();
+  renderAdminCharts();
+  const searchInput = document.getElementById('user-search');
+  renderUsersTable(searchInput ? searchInput.value : '');
+}
+
 
 /* =========================================================================
    5. REPORT SECTION (#report-section) & CSV EXPORT
@@ -875,6 +1003,169 @@ function initDashboardEvents() {
   if (searchInput) {
     searchInput.addEventListener('input', (e) => {
       renderUsersTable(e.target.value);
+    });
+  }
+
+  // Open Create User Modal (#create-user-btn)
+  const createUserBtn = document.getElementById('create-user-btn');
+  if (createUserBtn) {
+    createUserBtn.addEventListener('click', () => {
+      const form = document.getElementById('create-user-form');
+      if (form) form.reset();
+      const roleSelect = document.getElementById('new-user-role');
+      if (roleSelect) roleSelect.value = 'user';
+      if (typeof openModal === 'function') {
+        openModal('create-user-modal');
+      }
+    });
+  }
+
+  // Handle Create User Form submission (#create-user-form)
+  const createUserForm = document.getElementById('create-user-form');
+  if (createUserForm) {
+    createUserForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = (document.getElementById('new-user-name')?.value || '').trim();
+      const email = (document.getElementById('new-user-email')?.value || '').trim().toLowerCase();
+      const password = document.getElementById('new-user-password')?.value || '';
+      const role = document.getElementById('new-user-role')?.value || 'user';
+
+      if (!name || name.length < 2) {
+        if (typeof showToast === 'function') showToast('Please enter full name (at least 2 characters).', 'warning');
+        return;
+      }
+
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        if (typeof showToast === 'function') showToast('Please enter a valid email address.', 'warning');
+        return;
+      }
+
+      if (!password || password.length < 6) {
+        if (typeof showToast === 'function') showToast('Password must be at least 6 characters.', 'warning');
+        return;
+      }
+
+      const users = typeof getUsers === 'function' ? getUsers(false) : [];
+      if (users.some(u => (u.email || '').toLowerCase() === email)) {
+        if (typeof showToast === 'function') showToast('An account with this email address already exists.', 'error');
+        return;
+      }
+
+      const newUser = {
+        id: `u_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
+        name: name,
+        email: email,
+        password: password,
+        role: role === 'admin' ? 'admin' : 'user',
+        createdAt: new Date().toISOString(),
+        lastLogin: null
+      };
+
+      users.push(newUser);
+      if (typeof saveUsers === 'function') {
+        saveUsers(users);
+      } else {
+        localStorage.setItem('todo_users', JSON.stringify(users));
+      }
+
+      if (typeof closeModal === 'function') {
+        closeModal('create-user-modal');
+      }
+      createUserForm.reset();
+
+      if (typeof showToast === 'function') {
+        showToast(`User "${name}" created successfully as ${newUser.role === 'admin' ? 'Admin' : 'Member'}.`, 'success');
+      }
+
+      renderDashboardStats();
+      renderAdminCharts();
+      renderUsersTable(searchInput ? searchInput.value : '');
+    });
+  }
+
+  // Handle Edit User Form submission (#edit-user-form)
+  const editUserForm = document.getElementById('edit-user-form');
+  if (editUserForm) {
+    editUserForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const userId = document.getElementById('edit-user-id')?.value;
+      const name = (document.getElementById('edit-user-name')?.value || '').trim();
+      const email = (document.getElementById('edit-user-email')?.value || '').trim().toLowerCase();
+      const role = document.getElementById('edit-user-role')?.value || 'user';
+      const password = document.getElementById('edit-user-password')?.value || '';
+
+      if (!userId) return;
+
+      if (!name || name.length < 2) {
+        if (typeof showToast === 'function') showToast('Please enter full name (at least 2 characters).', 'warning');
+        return;
+      }
+
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        if (typeof showToast === 'function') showToast('Please enter a valid email address.', 'warning');
+        return;
+      }
+
+      const users = typeof getUsers === 'function' ? getUsers(false) : [];
+      const userIdx = users.findIndex(u => u.id === userId);
+      if (userIdx === -1) {
+        if (typeof showToast === 'function') showToast('User account not found.', 'error');
+        if (typeof closeModal === 'function') closeModal('edit-user-modal');
+        return;
+      }
+
+      // Check email uniqueness among other accounts
+      if (users.some(u => u.id !== userId && (u.email || '').toLowerCase() === email)) {
+        if (typeof showToast === 'function') showToast('Another user is already using this email address.', 'error');
+        return;
+      }
+
+      // Safeguard: Do not demote last admin
+      const adminCount = users.filter(u => u.role === 'admin').length;
+      if (users[userIdx].role === 'admin' && role !== 'admin' && adminCount <= 1) {
+        if (typeof showToast === 'function') {
+          showToast('Cannot change role: At least one administrator account must remain active.', 'warning');
+        }
+        return;
+      }
+
+      users[userIdx].name = name;
+      users[userIdx].email = email;
+      users[userIdx].role = role;
+
+      if (password && password.trim().length > 0) {
+        if (password.length < 6) {
+          if (typeof showToast === 'function') showToast('Password must be at least 6 characters if resetting.', 'warning');
+          return;
+        }
+        users[userIdx].password = password;
+      }
+
+      if (typeof saveUsers === 'function') {
+        saveUsers(users);
+      } else {
+        localStorage.setItem('todo_users', JSON.stringify(users));
+      }
+
+      // If the currently logged in admin modified their own account, update session and UI
+      const currentUser = typeof getCurrentUser === 'function' ? getCurrentUser() : null;
+      if (currentUser && currentUser.id === userId) {
+        if (typeof syncSidebarUser === 'function') {
+          syncSidebarUser();
+        }
+      }
+
+      if (typeof closeModal === 'function') {
+        closeModal('edit-user-modal');
+      }
+
+      if (typeof showToast === 'function') {
+        showToast('User account updated successfully.', 'success');
+      }
+
+      renderDashboardStats();
+      renderAdminCharts();
+      renderUsersTable(searchInput ? searchInput.value : '');
     });
   }
 

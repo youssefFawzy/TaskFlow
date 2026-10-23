@@ -212,3 +212,25 @@
     padding: var(--space-3) var(--space-3) var(--space-3) calc(var(--space-3) + 6px);
   }
 }
+
+/* =========================================================================
+   10. ADMIN USER BADGE
+   ========================================================================= */
+.task-user-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  font-size: var(--fs-xs);
+  font-weight: 500;
+  background: var(--surface-hover);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+
+.task-user-badge .icon {
+  width: 12px;
+  height: 12px;
+  opacity: 0.8;
+}

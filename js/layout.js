@@ -250,21 +250,36 @@ function showToast(message, type = 'info') {
       Any button with  data-close-modal  inside the modal closes it.
    ========================================================================= */
 function openModal(id) {
-  document.getElementById(id).classList.add('open');
+  const modal = document.getElementById(id);
+  if (!modal) return;
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
 }
 
 function closeModal(id) {
-  document.getElementById(id).classList.remove('open');
+  const modal = document.getElementById(id);
+  if (!modal) return;
+  modal.classList.remove('open');
+  if (!document.querySelector('.modal-overlay.open')) {
+    document.body.style.overflow = '';
+  }
 }
 
 // Close a modal when clicking the dark background or a [data-close-modal] button
 document.addEventListener('click', function (event) {
   if (event.target.classList.contains('modal-overlay')) {
     event.target.classList.remove('open');
+    if (!document.querySelector('.modal-overlay.open')) {
+      document.body.style.overflow = '';
+    }
   }
   const closeButton = event.target.closest('[data-close-modal]');
   if (closeButton) {
-    closeButton.closest('.modal-overlay').classList.remove('open');
+    const overlay = closeButton.closest('.modal-overlay');
+    if (overlay) overlay.classList.remove('open');
+    if (!document.querySelector('.modal-overlay.open')) {
+      document.body.style.overflow = '';
+    }
   }
 });
 
@@ -272,6 +287,7 @@ document.addEventListener('click', function (event) {
 document.addEventListener('keydown', function (event) {
   if (event.key === 'Escape') {
     document.querySelectorAll('.modal-overlay.open').forEach(modal => modal.classList.remove('open'));
+    document.body.style.overflow = '';
     closeSidebar();
   }
 });
@@ -304,6 +320,7 @@ function confirmDialog(title, message = '', isDanger = false) {
       </div>`;
 
     document.body.appendChild(overlay);
+    document.body.style.overflow = 'hidden';
     setTimeout(() => overlay.classList.add('open'), 10);
 
     overlay.addEventListener('click', function (event) {
@@ -312,6 +329,9 @@ function confirmDialog(title, message = '', isDanger = false) {
       if (!button && !clickedBackground) return;
 
       overlay.classList.remove('open');
+      if (!document.querySelector('.modal-overlay.open:not(#' + (overlay.id || 'none') + ')')) {
+        document.body.style.overflow = '';
+      }
       setTimeout(() => overlay.remove(), 300);
       resolve(button ? button.dataset.answer === 'yes' : false);
     });

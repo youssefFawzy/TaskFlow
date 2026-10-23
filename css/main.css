@@ -24,8 +24,8 @@
   --primary-hover: hsl(252 92% 72%);
   --primary-soft: hsl(252 92% 67% / 0.14);
   --accent: hsl(188 92% 55%);
-  --gradient: linear-gradient(135deg, hsl(252 92% 67%) 0%, hsl(218 92% 62%) 50%, hsl(188 92% 55%) 100%);
-  --gradient-soft: linear-gradient(135deg, hsl(252 92% 67% / 0.18), hsl(188 92% 55% / 0.12));
+  --gradient: linear-gradient(to right, hsl(252 92% 67%) 0%, hsl(218 92% 62%) 50%, hsl(188 92% 55%) 100%);
+  --gradient-soft: linear-gradient(to right, hsl(252 92% 67% / 0.18), hsl(188 92% 55% / 0.12));
 
   /* Status */
   --success: hsl(152 62% 50%);
@@ -519,14 +519,18 @@ ol {
 
 .btn-primary {
   color: #fff;
-  background: var(--gradient);
-  background-size: 150% 150%;
+  background-color: hsl(252 92% 67%);
+  background-image: var(--gradient);
+  background-repeat: no-repeat;
   box-shadow: var(--glow);
+  border: 1px solid transparent;
+  transition: transform var(--transition), box-shadow var(--transition),
+    filter var(--transition), border-color var(--transition), color var(--transition);
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  background-position: 100% 0;
+  filter: brightness(1.12);
   box-shadow: 0 12px 34px hsl(252 92% 67% / 0.45);
 }
 

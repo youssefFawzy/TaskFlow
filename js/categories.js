@@ -24,6 +24,7 @@ function renderCategories() {
     const categories = getTaskCategories();
     const user = getCurrentUser();
     const tasks = user ? readCategoryPageTasks().filter(task => task.userId === user.id) : [];
+    const userIsAdmin = typeof isAdmin === 'function' ? isAdmin() : false;
     document.getElementById('category-count').textContent =
       `${categories.length} ${categories.length === 1 ? 'category' : 'categories'}`;
     categoriesGrid.innerHTML = categories.map(category => {
@@ -31,6 +32,11 @@ function renderCategories() {
       const completed = categoryTasks.filter(task => task.status === 'completed').length;
       const progress = categoryTasks.length ? Math.round(completed / categoryTasks.length * 100) : 0;
       const href = `tasks.html?category=${encodeURIComponent(category.id)}`;
+      const canDelete = !category.isDefault || userIsAdmin;
+      const deleteTooltip = category.isDefault
+        ? (userIsAdmin ? 'Delete default category (Admin)' : 'Only administrators can delete default categories')
+        : 'Delete category';
+
       return `
         <article class="card category-card" style="--category-color:${category.color}">
           <a class="category-card-link" href="${escapeHTML(href)}" aria-label="View ${escapeHTML(category.name)} tasks">
@@ -54,7 +60,8 @@ function renderCategories() {
             </button>
             <button class="btn btn-ghost btn-sm category-delete" type="button"
                     data-delete-category="${escapeHTML(category.id)}"
-                    ${category.isDefault ? 'disabled title="Default categories cannot be deleted"' : ''}>
+                    ${canDelete ? '' : 'disabled'}
+                    title="${escapeHTML(deleteTooltip)}">
               ${icon('trash')} Delete
             </button>
           </div>
@@ -180,24 +187,48 @@ function saveCategoryEdit(event) {
 async function deleteCategory(id) {
   try {
     const category = findTaskCategory(id);
-    if (!category || category.isDefault) return;
+    if (!category) return;
 
-    const tasks = readCategoryPageTasks();
-    if (tasks.some(task => task.category === id)) {
-      showToast('Move this category’s tasks before deleting it.', 'warning');
+    const userIsAdmin = typeof isAdmin === 'function' ? isAdmin() : false;
+    if (category.isDefault && !userIsAdmin) {
+      showToast('Only administrators can delete default categories.', 'warning');
       return;
     }
 
-    const confirmed = await confirmDialog(
-      'Delete this category?',
-      `"${category.name}" will be permanently removed.`,
-      true
-    );
-    if (!confirmed) return;
+    const tasks = readCategoryPageTasks();
+    const tasksInCategory = tasks.filter(task => task.category === id);
+
+    if (tasksInCategory.length > 0) {
+      if (!userIsAdmin) {
+        showToast('Move or reassign this category’s tasks before deleting it.', 'warning');
+        return;
+      }
+
+      const confirmed = await confirmDialog(
+        'Delete category with active tasks?',
+        `"${category.name}" is assigned to ${tasksInCategory.length} task${tasksInCategory.length === 1 ? '' : 's'}. Deleting it will reassign these tasks.`,
+        true
+      );
+      if (!confirmed) return;
+
+      const remainingCats = getTaskCategories().filter(item => item.id !== id);
+      const fallbackCat = remainingCats.length > 0 ? remainingCats[0].id : '';
+      const updatedTasks = tasks.map(task => task.category === id ? { ...task, category: fallbackCat } : task);
+      localStorage.setItem('todo_tasks', JSON.stringify(updatedTasks));
+    } else {
+      const confirmed = await confirmDialog(
+        'Delete this category?',
+        category.isDefault
+          ? `"${category.name}" is a default category. Deleting it will permanently remove it for all users.`
+          : `"${category.name}" will be permanently removed.`,
+        true
+      );
+      if (!confirmed) return;
+    }
 
     saveTaskCategories(getTaskCategories().filter(item => item.id !== id));
     renderCategories();
-    showToast('Category deleted.', 'success');
+    showToast(`Category "${category.name}" deleted.`, 'success');
   } catch (err) {
     console.error('Unable to delete category:', err);
     showToast('Category could not be deleted. Check browser storage and try again.', 'error');

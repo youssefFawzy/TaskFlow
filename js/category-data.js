@@ -35,12 +35,6 @@ function getTaskCategories() {
     };
   });
 
-  DEFAULT_TASK_CATEGORIES.forEach(defaultCategory => {
-    if (!categories.some(category => category.id === defaultCategory.id)) {
-      categories.unshift({ ...defaultCategory });
-    }
-  });
-
   return categories;
 }
 
